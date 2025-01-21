@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}SuperVive - Sign up{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<body>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="row w-100">
+        <div class="col-md-6 mx-auto">
+            <div class="card p-4 shadow-sm">
+                <h1 class="text-center mb-4">Login</h1>
+
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div>
+                        <label for="email">Email address:</label>
+                        {{ form.email(class="form-control", placeholder="Enter your email") }}
+                    </div>
+                    <div>
+                        <label for="password">Password:</label>
+                        {{ form.password(class="form-control", placeholder="Enter your password") }}
+                    </div>
+                    <p><a href="{{ url_for('forgot_password') }}">Forgot password</a></p>
+                    <br>
+                    <button type="submit" class="btn btn-primary" >Login</button>
+                </form>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <ul>
+                    {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+
+                <p>Don't have an account? <a href="{{ url_for('signup_cus') }}">Sign Up</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+{% endblock %}
