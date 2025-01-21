@@ -340,7 +340,7 @@ def admin_logout():
     flash('Admin logged out successfully.', 'success')
     return redirect(url_for('home'))
 
-print(": starting 123")
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 
