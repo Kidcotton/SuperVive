@@ -171,6 +171,7 @@ def discount(component, condition):
     return discount_value
 
 
+print(": starting")
 if __name__ == '__main__':
     app.run()
 
