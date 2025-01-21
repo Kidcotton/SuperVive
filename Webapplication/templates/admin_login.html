@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="row w-100">
+        <div class="col-md-6 mx-auto">
+            <div class="card p-4 shadow-sm">
+                <h1 class="text-center mb-4">Admin Login</h1>
+                <form method="POST" action="{{ url_for('admin_login') }}">
+                    <div>
+                        <label for="email">Email:</label>
+                        <input type="text" name="email" class="form-control" placeholder="Enter admin email" required>
+                    </div>
+                    <div>
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" class="form-control" placeholder="Enter admin password" required>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <ul>
+                    {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
