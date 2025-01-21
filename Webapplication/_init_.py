@@ -191,10 +191,6 @@ class ResetPasswordForm(Form):
     ])
 
 
-app = Flask(__name__)
-app.secret_key = 'your_secret_key'
-
-
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
     form = ForgotPasswordForm(request.form)
@@ -235,11 +231,6 @@ def reset_password():
                 return redirect(url_for('forgot_password'))
 
     return render_template('reset_password.html', form=form)
-
-
-@app.route('/')
-def home():
-    return render_template('home.html')
 
 
 @app.route('/select', methods=['GET'])
