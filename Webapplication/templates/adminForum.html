@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Admin{% endblock %}
+
+{% block content %}
+<h1>Admin - Manage Comments</h1>
+
+<ul>
+    {% for comment in comments %}
+    <li style="color: {% if comment.is_admin %}red{% else %}black{% endif %};">
+        <strong>{{ comment.name }}</strong>: {{ comment.comment }}
+        <form method="POST" action="" style="display: inline;">
+            <input type="hidden" name="comment_index" value="{{ loop.index0 }}">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            <button type="edit" class="btn btn-danger btn-sm">Edit</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+
+<a href="{{ url_for('customerForum') }}" class="btn btn-secondary">Back to Customer Forum</a>
+{% endblock %}
