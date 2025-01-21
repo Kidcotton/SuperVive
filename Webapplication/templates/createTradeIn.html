@@ -1,0 +1,105 @@
+<style>
+  .everything {
+    font-family: calisto;
+  }
+
+  .company {
+    text-align:center;
+    margin-top: 50px;
+  }
+
+  #title{
+    font-family: Georgia;
+  }
+
+  .company h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000000;
+  }
+
+  .container{
+    background-color:#1a1a1a;
+    height: 82%;
+    border: 2px solid black;
+    border-radius: 25px;
+    width: 250px;
+  }
+
+  h1{
+    text-align: center;
+    margin-top: 20px;
+    color: white;
+    font-size: 2.5rem;
+
+  }
+
+  /* Form Styles */
+  form {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .btn.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .btn.btn-primary:hover {
+    background-color: #0056b3;
+  }
+
+  #prof .form-group {
+    margin-top: 20px;
+  }
+</style>
+
+{% extends "base.html" %}
+{% block title %}Library Loan System - Create User{% endblock %}
+
+{% block content %}
+{% from "include/CreateTradeInHelper.html" import render_field %}
+
+<div class="everything">
+  <div class="company">
+    <h2>SuperVive &trade;</h2>
+  </div>
+
+  <div class="container">
+    <h1 id="title"><u>Create Trade In</u></h1>
+    <form method="POST" action="">
+      <div class="form-group">
+        {{ render_field(form.computer_component, class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ render_field(form.part_types, class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ render_field(form.condition, class="form-check", style="list-style-type:none") }}
+      </div>
+      <div id="prof">
+        <div class="form-group">
+          {{ render_field(form.remarks, class="form-control") }}
+        </div>
+      </div>
+      <input type="submit" value="Submit" class="btn btn-primary"/>
+    </form>
+  {% endblock %}
+  </div>
+</div>
+
+

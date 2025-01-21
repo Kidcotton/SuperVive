@@ -1,0 +1,82 @@
+<style>
+  .company {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .company img {
+    width: 80px;
+    height: auto;
+  }
+
+  .company h7 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000000;
+  }
+
+  .container {
+    margin: 40px auto;
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    background-size: auto 6px;
+  }
+
+  .container h1 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #fff;
+    border-bottom: 2px solid #fff;
+    padding-bottom: 10px;
+  }
+
+  .details p {
+    font-size: 1rem;
+    margin: 10px 0;
+    line-height: 1.5;
+    color: #ffffff;
+    text-align:center;
+  }
+
+  .details p b {
+    color: #ccc;
+  }
+
+  .details p:last-of-type {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ffcc00;
+  }
+</style>
+
+{% extends "base.html" %}
+{% block title %}Library Loan System - Home{% endblock %}
+
+{% block content %}
+<div class="company">
+  <img src="static/images/Computer_company_logo.jpg" alt="Company Logo">
+  <br>
+  <h7><b>SuperVive &trade;</b></h7>
+</div>
+<div class="container">
+  <h1 class="display-4">Trade-In Information</h1>
+  <br>
+  <div class="details">
+    {% for user in users_list %}
+    <p><b><u>Computer Component:</u></b></p>
+    <p>{{ user.get_pc_component() }}</p>
+    <p><b><u>Types of {{ user.get_pc_component() }}:</u></b></p>
+    <p>{{ user.get_types_component() }}</p>
+    <p><b><u>Condition of {{ user.get_pc_component() }}:</u></b></p>
+    <p>{{ user.get_condition() }}</p>
+    <p><b><u>Remarks:</u></b></p>
+    <p>{{ user.get_remarks() }}</p>
+    <p><b><u>Total Discount:</u></b></p>
+    <p>{{ user.discount }}</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

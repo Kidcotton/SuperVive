@@ -1,0 +1,103 @@
+<style>
+  .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .display-4 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: 600;
+  }
+
+  .display-4 u {
+      border-bottom: 3px solid #3498db;
+      text-decoration: none;
+      padding-bottom: 5px;
+  }
+
+  form {
+      padding: 1rem;
+  }
+
+  .form-group {
+      margin-bottom: 1.5rem;
+  }
+
+  label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #34495e;
+      font-weight: 500;
+      font-size: 1rem;
+  }
+
+  .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+  }
+
+  .form-control:focus {
+      border-color: #3498db;
+      outline: none;
+      box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+  }
+
+  .form-check {
+      padding-left: 0;
+  }
+
+  .form-check-input {
+      margin-right: 10px;
+  }
+
+  .form-check-label {
+      color: #555;
+  }
+  textarea.form-control {
+      min-height: 200px;
+      resize: vertical;
+  }
+
+  .form-control:hover {
+      border-color: #bdc3c7;
+  }
+
+</style>
+
+
+{% extends "base.html" %}
+{% block title %}Library Loan System - Update User{% endblock %}
+
+{% block content %}
+{% from "include/CreateTradeInHelper.html" import render_field %}
+
+<h1 class="display-4"><u>Update Trade-Ins</u></h1>
+
+<form method="POST" action="">
+  <div class="form-group">
+    {{ render_field(form.computer_component, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.part_types, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.condition, class="form-check", style="list-style-type:none") }}
+  </div>
+  <div id="prof">
+    <div class="form-group">
+      {{ render_field(form.remarks, class="form-control") }}
+    </div>
+  </div>
+  <input type="submit" value="Submit" class="btn btn-primary"/>
+</form>
+{% endblock %}
