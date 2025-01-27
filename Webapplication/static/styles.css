@@ -1,0 +1,53 @@
+/* Gelion font in fonts folder ttf */
+
+@font-face {
+    font-family: 'Gelion';
+    src: url('../fonts/Gelion Regular.ttf') format('truetype');
+}
+/* Recoleta font in fonts folder otf */
+
+@font-face {
+    font-family: 'Recoleta';
+    src: url('/fonts/Recoleta Alt Medium.otf') format('opentype');
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    font-family: Gelion;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+h1 {
+    color: #333;
+    font-family: Recoleta;
+}
+
+form input, form button {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 16px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

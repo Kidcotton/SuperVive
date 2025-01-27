@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}All Products{% endblock %}
+
+{% block content %}
+<h1 class="text-center mb-4">All Products in Inventory</h1>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Product ID</th>
+                <th>Name</th>
+                <th>Price (USD)</th>
+                <th>Stock Quantity</th>
+                <th>Image</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>${{ product.price }}</td>
+                <td>{{ product.stock }}</td>
+                
+                <td>
+                    <img src="{{ url_for('static', filename='images/' + product.image if product.image else 'images/default.jpg') }}" 
+                    alt="{{ product.name }}" style="max-width: 100px;">
+               
+                </td>
+                <td>{{ product.description }}</td>
+                <td>
+                    <a href="/edit/{{ product.id }}" class="btn btn-primary btn-sm">Edit</a>
+                    <a href="/delete_stock/{{ product.id }}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7" class="text-center">No products available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
