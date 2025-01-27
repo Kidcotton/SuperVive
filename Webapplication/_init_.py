@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from createTradeIn import CreateTradeInForm
-import shelve, tradein
+import shelve, tradein, User, Customer
 from SignupForm import SignUpForm
 from Form import Login
+from Forms import CreateUserForm, CreateCustomerForm
 from User import User
 from wtforms import Form, StringField, PasswordField, validators
 
