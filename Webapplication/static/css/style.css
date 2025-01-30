@@ -92,3 +92,11 @@ p a {
     color: #fff;
     font-weight: bold;
 }
+
+.position-absolute {
+    color: black;
+    cursor: pointer;
+    top: 73%; /* Adjust this value to push the icon lower */
+    transform: translateY(-50%);
+    right: 10px;
+}
