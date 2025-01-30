@@ -70,5 +70,11 @@ form a {
 form a:hover {
     color: #fff; /* White text on hover */
 }
-
+.position-absolute {
+    color: black;
+    cursor: pointer;
+    top: 73%;
+    transform: translateY(-50%);
+    right: 10px;
+}
 /* Heading

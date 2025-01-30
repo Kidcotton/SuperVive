@@ -5,9 +5,11 @@
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
 
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/styling.css') }}">
 <script src="{{ url_for('static', filename='javascript/password_toggle.js') }}"></script>
+
+
 <body>
 
 <div class="container d-flex justify-content-center align-items-center vh-100">
@@ -19,11 +21,17 @@
                     <div class="form-group">
                         {{ render_field(form.email, class="form-control", placeholder="Enter your email") }}
                     </div>
-                    <div class="form-group">
+                    <div class="form-group position-relative">
                         {{ render_field(form.password, class="form-control", type="password", placeholder="Enter your password") }}
+                        <span class="position-absolute" onclick="togglePassword('password')">
+                            <i class="fa fa-eye" id="togglePasswordIcon"></i>
+                        </span>
                     </div>
-                    <div class="form-group">
-                        {{ render_field(form.confirm_password, class="form-control", type="password") }}
+                    <div class="form-group position-relative">
+                        {{ render_field(form.confirm_password, class="form-control", type="password", placeholder="Enter confirm password") }}
+                        <span class="position-absolute" onclick="togglePassword('confirm_password')">
+                            <i class="fa fa-eye" id="toggleConfirmPasswordIcon"></i>
+                        </span>
                     </div>
                     <br>
                     <input type="submit" value="Sign up" class="btn btn-primary"/>
@@ -43,5 +51,20 @@
         </div>
     </div>
 </div>
+<script>
+function togglePassword(fieldId) {
+    var field = document.getElementById(fieldId);
+    var icon = field.nextElementSibling.querySelector('i');
+    if (field.type === "password") {
+        field.type = "text";
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        field.type = "password";
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+</script>
 </body>
 {% endblock %}
