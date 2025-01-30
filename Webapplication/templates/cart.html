@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Gaming Deals</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            padding-top: 100px;
+        }
+        .cart-container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+        }
+        .cart-item {
+            background-color: #444;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .cart-item img {
+            max-width: 100px;
+            border-radius: 10px;
+        }
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container cart-container">
+        <h2>My Cart</h2>
+        <div id="cart-items">
+            <!-- Cart items will be dynamically inserted here -->
+        </div>
+        <div class="text-end">
+            <h4>Subtotal: <span id="subtotal">$0.00</span></h4>
+            <h4>Savings: <span id="savings">$0.00</span></h4>
+            <h3>Total: <span id="total">$0.00</span></h3>
+            <button class="btn btn-primary">Checkout</button>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- <script>
+        // JavaScript to dynamically update the cart
+        function updateCart() {
+            fetch('/get_cart')
+                .then(response => response.json())
+                .then(data => {
+                    const cartItems = document.getElementById('cart-items');
+                    cartItems.innerHTML = '';
+                    let subtotal = 0;
+                    let savings = 0;
+                    data.forEach(item => {
+                        const itemElement = document.createElement('div');
+                        itemElement.className = 'cart-item';
+                        itemElement.innerHTML = `
+                            <img src="${item.image}" alt="${item.name}">
+                            <h3>${item.name}</h3>
+                            <p>Quantity: ${item.quantity}</p>
+                            <p class="price">$${item.price.toFixed(2)}</p>
+                            <button class="btn btn-danger" onclick="removeFromCart('${item.id}')">Remove</button>
+                        `;
+                        cartItems.appendChild(itemElement);
+                        subtotal += item.price * item.quantity;
+                        savings += item.savings || 0;
+                    });
+                    document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+                    document.getElementById('savings').textContent = `$${savings.toFixed(2)}`;
+                    document.getElementById('total').textContent = `$${(subtotal - savings).toFixed(2)}`;
+                });
+        }
+    
+        function removeFromCart(itemId) {
+            fetch('/remove_from_cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ item_id: itemId }),
+            }).then(() => updateCart());
+        }
+    
+        document.addEventListener('DOMContentLoaded', updateCart);
+    </script> -->
+    <script>
+        // JavaScript to dynamically update the cart
+        function updateCart() {
+            fetch('/get_cart')
+                .then(response => response.json())
+                .then(data => {
+                    const cartItems = document.getElementById('cart-items');
+                    cartItems.innerHTML = '';
+                    let subtotal = 0;
+                    let savings = 0;
+    
+                    data.forEach(item => {
+                        const itemElement = document.createElement('div');
+                        itemElement.className = 'cart-item';
+    
+                        // Cart Item Layout
+                        itemElement.innerHTML = `
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex">
+                                    <img src="/static/${item.image}" alt="${item.name}">
+                                    <div class="ms-3">
+                                        <h5>${item.name}</h5>
+                                        <p>Price: $${item.price}</p>
+                                        <p>Quantity: ${item.quantity}</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column align-items-end">
+                                    <p class="price">$${(item.price * item.quantity).toFixed(2)}</p>
+                                    <button class="btn btn-danger" onclick="removeFromCart('${item.id}')">Remove</button>
+                                </div>
+                            </div>
+                        `;
+    
+                        cartItems.appendChild(itemElement);
+                        subtotal += item.price * item.quantity;
+                        // Assume a fixed savings (modify based on your business logic)
+                        savings += 10 * item.quantity;  // Example: $10 savings per item
+                    });
+    
+                    // Update totals
+                    document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+                    document.getElementById('savings').textContent = `$${savings.toFixed(2)}`;
+                    document.getElementById('total').textContent = `$${(subtotal - savings).toFixed(2)}`;
+                });
+        }
+    
+        function removeFromCart(itemId) {
+            fetch('/remove_from_cart', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ item_id: itemId })
+            })
+            .then(response => response.json())
+            .then(() => updateCart());
+        }
+    
+        // Update cart on page load
+        window.onload = updateCart;
+    </script>
+</body>
+</html>
+{% endblock %}

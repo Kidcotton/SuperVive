@@ -1,20 +1,151 @@
-{% extends "base.html" %}
-{% block title %}SuperVive - Home{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Search Inventory{% endblock %}
 
 {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Gaming Deals</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <style>
-        body{
-            background-color: grey;
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
         }
-        h1{
-            padding-top: 60px;
-            font-size: 100px;
+
+        .hero-section {
+            background-image: url('static/images/gaming-pc-banner.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 50px;
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .sales-deals {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+        }
+
+        .card {
+            background-color: #444;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            margin: 10px 0;
+            color: white;
+        }
+
+        .card img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .discount-badge {
+            background: #e63946;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 5px 10px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            border-radius: 5px;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #999;
+            margin-left: 10px;
+        }
+
+        .stock-info {
+            color: #28a745;
+            font-size: 16px;
         }
     </style>
 </head>
+
 <body>
-<h1>Home</h1>
-<p>text</p>
+    <div class="container">
+        <div class="hero-section">
+            <h1>Level Up Your Gaming PC</h1>
+        </div>
+
+        <div class="sales-deals">
+            <h2 class="text-center">Level Up Your Gaming PC</h2>
+            <div class="row">
+                <!-- Product 1 -->
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="card position-relative">
+                        <div class="discount-badge">17% OFF</div>
+                        <img src="static/images/rtx-4070.jpg" alt="GeForce RTX 4070 Super">
+                        <div class="card-body">
+                            <h3 class="card-title">GeForce RTX 4070 Super</h3>
+                            <p class="stock-info">Only 500 stocks left!</p>
+                            <p class="price">$499.90 <span class="old-price">$600</span></p>
+                            <!-- Add to Cart Button -->
+                            <form action="/add_to_cart" method="POST">
+                                <input type="hidden" name="product_id" value="CP005">
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="card position-relative">
+                        <div class="discount-badge">21% OFF</div>
+                        <img src="static/images/gskill-ram.jpg" alt="G.Skill Trident Z5 Neo RGB">
+                        <div class="card-body">
+                            <h3 class="card-title">G.Skill Trident Z5 Neo RGB<br>(2x16GB DDR5-6000)</h3>
+                            <p class="stock-info">Only 700 stocks left!</p>
+                            <p class="price">$189 <span class="old-price">$239</span></p>
+                            <!-- Add to Cart Button -->
+                            <form action="/add_to_cart" method="POST">
+                                <input type="hidden" name="product_id" value="CP006">
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="card position-relative">
+                        <div class="discount-badge">15% OFF</div>
+                        <img src="static/images/amd-ryzen.jpg" alt="AMD Ryzen 7 9700X">
+                        <div class="card-body">
+                            <h3 class="card-title">AMD Ryzen 7 9700X</h3>
+                            <p class="stock-info">Only 800 stocks left!</p>
+                            <p class="price">$299 <span class="old-price">$349</span></p>
+                            <!-- Add to Cart Button -->
+                            <form action="/add_to_cart" method="POST">
+                                <input type="hidden" name="product_id" value="CP007">
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
+
+</html>
 {% endblock %}
