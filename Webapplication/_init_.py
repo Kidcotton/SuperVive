@@ -398,9 +398,7 @@ def reset_password():
                 return redirect(url_for('forgot_password'))
     return render_template('reset_password.html', form=form)
 
-@app.route('/select', methods=['GET'])
-def select():
-    return render_template('select.html')
+
 
 @app.route('/signup_cus', methods=['GET', 'POST'])
 def signup_cus():
@@ -485,6 +483,17 @@ def admin_logout():
     session.pop('admin_logged_in', None)
     flash('Admin logged out successfully.', 'success')
     return redirect(url_for('home'))
+
+@app.route('/logout')
+def logout():
+    session.pop('email', None)
+    flash('You have been logged out successfully.', 'success')
+    return redirect(url_for('home'))
+
+
+@app.context_processor
+def inject_user():
+    return dict(user_email=session.get('email'))
 
 if __name__ == '__main__':
     app.run(debug=True)
