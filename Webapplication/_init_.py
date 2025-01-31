@@ -28,7 +28,6 @@ def add_to_cart():
         if product_id in db:
             product = db[product_id]
             cart = session.get('cart', [])
-            # Safely convert non-dict items to a dictionary structure
             cart = [
                 item if isinstance(item, dict) 
                 else {'id': str(item), 'quantity': 1}
@@ -46,10 +45,9 @@ def add_to_cart():
                     'quantity': 1
                 })
             session['cart'] = cart
-            flash('Product added to cart!', 'success')
+            return jsonify(success=True)
         else:
-            flash(f'Product with ID {product_id} not found!', 'error')
-            print(f"Product {product_id} not found!")
+            return jsonify(success=False, message=f'Product with ID {product_id} not found!')
 
     return redirect(url_for('home'))
 
@@ -184,7 +182,7 @@ def populate():
             'name': 'GeForce RTX 4070 Super',
             'price': 499.90,
             'stock': 50,
-            'image': 'static/images/rtx-4070.jpg',
+            'image': 'images/rtx-4070.jpg',
             'description': 'GeForce RTX 4070 Super graphics card'
         }
         db['CP006'] = {
@@ -201,7 +199,6 @@ def populate():
             'image': 'static/images/amd-ryzen.jpg',
             'description': 'AMD Ryzen 7 9700X processor'
         }
-        print("Products added to database:", list(db.keys()))
     flash('Database populated!', 'success')
     return redirect(url_for('index'))
 
@@ -480,15 +477,14 @@ def admin_login():
 
 @app.route('/admin_logout')
 def admin_logout():
-    session.pop('admin_logged_in', None)
-    flash('Admin logged out successfully.', 'success')
-    return redirect(url_for('home'))
+    session.clear()  
+    return jsonify(success=True)  
+
 
 @app.route('/logout')
 def logout():
-    session.pop('email', None)
-    flash('You have been logged out successfully.', 'success')
-    return redirect(url_for('home'))
+    session.clear()  
+    return jsonify(success=True)  
 
 
 @app.context_processor

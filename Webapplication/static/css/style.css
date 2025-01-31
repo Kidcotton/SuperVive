@@ -3,8 +3,10 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background: #2c2c2c; /* Dark gray background */
-    color: #fff; /* White text */
+    background: #2c2c2c;
+    /* Dark gray background */
+    color: #fff;
+    /* White text */
     height: 100vh;
 }
 
@@ -18,10 +20,12 @@ body {
 
 /* Card styling */
 .card {
-    background: #000; /* Pure black background */
+    background: #000;
+    /* Pure black background */
     border-radius: 15px;
     padding: 30px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    /* Subtle shadow */
 }
 
 /* Form input fields */
@@ -33,8 +37,10 @@ form input {
     border: none;
     outline: none;
     font-size: 16px;
-    background: #f0f0f0; /* Light gray input background */
-    color: #000; /* Dark text */
+    background: #f0f0f0;
+    /* Light gray input background */
+    color: #000;
+    /* Dark text */
 }
 
 /* Labels for form fields */
@@ -42,14 +48,16 @@ form label {
     font-size: 14px;
     margin-bottom: 5px;
     display: block;
-    color: #ddd; /* Lighter text color */
+    color: #ddd;
+    /* Lighter text color */
 }
 
 /* Buttons */
 form button[type="submit"] {
     width: 100%;
     padding: 10px;
-    background: #a50000; /* Red button background */
+    background: #a50000;
+    /* Red button background */
     color: #fff;
     font-size: 16px;
     font-weight: bold;
@@ -59,17 +67,20 @@ form button[type="submit"] {
 }
 
 form button[type="submit"]:hover {
-    background: #ff0000; /* Bright red hover effect */
+    background: #ff0000;
+    /* Bright red hover effect */
 }
 
 /* Links */
 form a {
-    color: #ddd; /* Lighter text for links */
+    color: #ddd;
+    /* Lighter text for links */
     text-decoration: none;
 }
 
 form a:hover {
-    color: #fff; /* White text on hover */
+    color: #fff;
+    /* White text on hover */
 }
 
 /* Flash message list styling */
@@ -79,7 +90,8 @@ ul {
 }
 
 li.error {
-    color: #ff4c4c; /* Red text for error messages */
+    color: #ff4c4c;
+    /* Red text for error messages */
 }
 
 /* Align footer links */
@@ -96,7 +108,15 @@ p a {
 .position-absolute {
     color: black;
     cursor: pointer;
-    top: 73%; /* Adjust this value to push the icon lower */
+    top: 73%;
+    /* Adjust this value to push the icon lower */
     transform: translateY(-50%);
     right: 10px;
+}
+
+.body {
+    padding-top: auto;
+}
+.sign {
+    color: blue;
 }

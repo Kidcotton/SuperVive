@@ -43,7 +43,6 @@
     <div class="container cart-container">
         <h2>My Cart</h2>
         <div id="cart-items">
-            <!-- Cart items will be dynamically inserted here -->
         </div>
         <div class="text-end">
             <h4>Subtotal: <span id="subtotal">$0.00</span></h4>
@@ -53,48 +52,6 @@
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <!-- <script>
-        // JavaScript to dynamically update the cart
-        function updateCart() {
-            fetch('/get_cart')
-                .then(response => response.json())
-                .then(data => {
-                    const cartItems = document.getElementById('cart-items');
-                    cartItems.innerHTML = '';
-                    let subtotal = 0;
-                    let savings = 0;
-                    data.forEach(item => {
-                        const itemElement = document.createElement('div');
-                        itemElement.className = 'cart-item';
-                        itemElement.innerHTML = `
-                            <img src="${item.image}" alt="${item.name}">
-                            <h3>${item.name}</h3>
-                            <p>Quantity: ${item.quantity}</p>
-                            <p class="price">$${item.price.toFixed(2)}</p>
-                            <button class="btn btn-danger" onclick="removeFromCart('${item.id}')">Remove</button>
-                        `;
-                        cartItems.appendChild(itemElement);
-                        subtotal += item.price * item.quantity;
-                        savings += item.savings || 0;
-                    });
-                    document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-                    document.getElementById('savings').textContent = `$${savings.toFixed(2)}`;
-                    document.getElementById('total').textContent = `$${(subtotal - savings).toFixed(2)}`;
-                });
-        }
-    
-        function removeFromCart(itemId) {
-            fetch('/remove_from_cart', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ item_id: itemId }),
-            }).then(() => updateCart());
-        }
-    
-        document.addEventListener('DOMContentLoaded', updateCart);
-    </script> -->
     <script>
         // JavaScript to dynamically update the cart
         function updateCart() {

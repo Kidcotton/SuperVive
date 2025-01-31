@@ -79,6 +79,18 @@
           <li class="nav-item">
             <a class="nav-link" href="/index">Inventory-Management</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin">Manage Users</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="bi bi-person-circle fs-2"></i>
+              {% if user_email %}
+                <span class="user-email">{{ user_email }}</span>
+              {% endif %}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#" onclick="confirmLogout()">Logout</a>
         </ul>
       </div>
     </div>
@@ -88,4 +100,19 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+<script>
+  function confirmLogout() {
+      if (confirm("Are you sure you want to log out?")) {  
+          fetch('/logout')  
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      alert("Logged out successfully!");  
+                      window.location.href = "/";  
+                  }
+              })
+              .catch(error => console.error("Logout error:", error));
+      }
+  }
+</script>
 </html>

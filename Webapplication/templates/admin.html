@@ -3,9 +3,13 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
+<style>
+    .text-center{
+        padding-top:50px;
+    }
+</style>
 <div class="container mt-5">
     <h1 class="text-center">Admin Dashboard</h1>
-    <a href="{{ url_for('admin_logout') }}" class="btn btn-danger mb-3">Logout</a>
     <table class="table table-bordered">
         <thead>
             <tr>

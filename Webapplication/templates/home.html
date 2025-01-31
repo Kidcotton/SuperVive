@@ -26,6 +26,7 @@
             text-align: center;
             color: white;
             margin-bottom: 30px;
+            padding-top: 450px;
         }
 
         .sales-deals {
@@ -76,19 +77,26 @@
             color: #28a745;
             font-size: 16px;
         }
+        .modal-title{
+            color: black;
+        }
+        .modal-body{
+            color: black;
+        }
     </style>
 </head>
+
 
 <body>
     <div class="container">
         <div class="hero-section">
-            <h1>Level Up Your Gaming PC</h1>
+            
         </div>
 
         <div class="sales-deals">
-            <h2 class="text-center">Level Up Your Gaming PC</h2>
+            <h2 class="text-center">Sales Deals</h2>
             <div class="row">
-                <!-- Product 1 -->
+                
                 <div class="col-md-4 col-sm-6 mb-4">
                     <div class="card position-relative">
                         <div class="discount-badge">17% OFF</div>
@@ -97,8 +105,8 @@
                             <h3 class="card-title">GeForce RTX 4070 Super</h3>
                             <p class="stock-info">Only 500 stocks left!</p>
                             <p class="price">$499.90 <span class="old-price">$600</span></p>
-                            <!-- Add to Cart Button -->
-                            <form action="/add_to_cart" method="POST">
+                            
+                            <form class="add-to-cart-form" action="/add_to_cart" method="POST">
                                 <input type="hidden" name="product_id" value="CP005">
                                 <button type="submit" class="btn btn-primary">Add to Cart</button>
                             </form>
@@ -106,7 +114,7 @@
                     </div>
                 </div>
 
-                <!-- Product 2 -->
+                
                 <div class="col-md-4 col-sm-6 mb-4">
                     <div class="card position-relative">
                         <div class="discount-badge">21% OFF</div>
@@ -115,8 +123,8 @@
                             <h3 class="card-title">G.Skill Trident Z5 Neo RGB<br>(2x16GB DDR5-6000)</h3>
                             <p class="stock-info">Only 700 stocks left!</p>
                             <p class="price">$189 <span class="old-price">$239</span></p>
-                            <!-- Add to Cart Button -->
-                            <form action="/add_to_cart" method="POST">
+                            
+                            <form class="add-to-cart-form" action="/add_to_cart" method="POST">
                                 <input type="hidden" name="product_id" value="CP006">
                                 <button type="submit" class="btn btn-primary">Add to Cart</button>
                             </form>
@@ -124,18 +132,34 @@
                     </div>
                 </div>
 
-                <!-- Product 3 -->
+                
                 <div class="col-md-4 col-sm-6 mb-4">
                     <div class="card position-relative">
                         <div class="discount-badge">15% OFF</div>
-                        <img src="static/images/amd-ryzen.jpg" alt="AMD Ryzen 7 9700X">
+                        <img src="static/images/amd-ryzen.jpg" alt="AMD Ryzen 7 9700X" width="200%" >
                         <div class="card-body">
                             <h3 class="card-title">AMD Ryzen 7 9700X</h3>
                             <p class="stock-info">Only 800 stocks left!</p>
                             <p class="price">$299 <span class="old-price">$349</span></p>
-                            <!-- Add to Cart Button -->
-                            <form action="/add_to_cart" method="POST">
+                            
+                            <form class="add-to-cart-form" action="/add_to_cart" method="POST">
                                 <input type="hidden" name="product_id" value="CP007">
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="card position-relative">
+                        <div class="discount-badge">15% OFF</div>
+                        <img src="static/images/gpu_nvidia_gtx_1660.jpg" alt="Nvidia gtx 1660 gpu" width="200%" >
+                        <div class="card-body">
+                            <h3 class="card-title">Nvidia gtx 1660 gpu</h3>
+                            <p class="stock-info">Only 800 stocks left!</p>
+                            <p class="price">$400 <span class="old-price">$500</span></p>
+                            
+                            <form class="add-to-cart-form" action="/add_to_cart" method="POST">
+                                <input type="hidden" name="product_id" value="CP002">
                                 <button type="submit" class="btn btn-primary">Add to Cart</button>
                             </form>
                         </div>
@@ -147,5 +171,48 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 
+<!-- Modal -->
+<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalLabel">Item Added to Cart</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                The item has been added to your shopping cart.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="/cart" class="btn btn-primary">Go to Cart</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Listen for the form submission and add the product to the cart
+    document.querySelectorAll('.add-to-cart-form').forEach(form => {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            const formData = new FormData(form);
+            
+            fetch('/add_to_cart', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show the modal if the product was added successfully
+                    var myModal = new bootstrap.Modal(document.getElementById('cartModal'));
+                    myModal.show();
+                } else {
+                    alert(data.message); // Show an alert if there was an error
+                }
+            });
+        });
+    });
+</script>
 </html>
 {% endblock %}
