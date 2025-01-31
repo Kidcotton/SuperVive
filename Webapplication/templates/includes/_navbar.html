@@ -7,7 +7,10 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     .navbar {
-      background-color: #000;
+      background-image: url('static/images/real.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
     }
 
     .navbar-brand {
@@ -63,17 +66,23 @@
 
     .nav-item .user-email {
       position: relative;
-      top: -8px; 
+      top: -8px;
       margin-left: 5px;
     }
 
     .dropdown-menu {
       left: auto;
-      right: 0; 
+      right: 0;
     }
+
     .navbar-nav .nav-link.active {
       text-decoration: underline;
       color: blue !important;
+    }
+
+    .logo-img {
+      height: 40px;
+      width: auto;
     }
   </style>
 </head>
@@ -81,47 +90,52 @@
 <body>
   <nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/">SuperVive &trade;</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/prebuild">Pre-build</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/">Find-Us</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="adminForum">Support</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="bi bi-person-circle fs-2"></i>
-              {% if user_email %}
+      <a class="navbar-brand d-flex align-items-center fs-3" href="/">
+        <img src="/static/images/image.png" alt="SuperVive Logo" class="logo-img">
+        <a class="navbar-brand" href="/">SuperVive &trade;</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/prebuild">Pre-build</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/">Find-Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="adminForum">Support</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="bi bi-person-circle fs-2"></i>
+                {% if user_email %}
                 <span class="user-email">{{ user_email }}</span>
-              {% endif %}
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              {% if user_email %}
+                {% endif %}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% if user_email %}
                 <a class="dropdown-item" href="#" onclick="confirmLogout()">Logout</a>
-              {% else %}
+                {% else %}
                 <a class="dropdown-item" href="/signup_cus">Signup</a>
                 <a class="dropdown-item" href="/login_cus">Login</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/admin_login">Admin login</a>
-              {% endif %}
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {% if request.path == '/cart' %}active{% endif %}" href="/cart"><i class="bi bi-cart bi fs-2"></i></a>
-          </li>
-        </ul>
-      </div>
+                {% endif %}
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == '/cart' %}active{% endif %}" href="/cart"><i
+                  class="bi bi-cart bi fs-2"></i></a>
+            </li>
+          </ul>
+        </div>
     </div>
   </nav>
 
@@ -131,17 +145,18 @@
 </body>
 <script>
   function confirmLogout() {
-      if (confirm("Are you sure you want to log out?")) {  
-          fetch('/logout')  
-              .then(response => response.json())
-              .then(data => {
-                  if (data.success) {
-                      alert("Logged out successfully!");  
-                      window.location.href = "/";  
-                  }
-              })
-              .catch(error => console.error("Logout error:", error));
-      }
+    if (confirm("Are you sure you want to log out?")) {
+      fetch('/logout')
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert("Logged out successfully!");
+            window.location.href = "/";
+          }
+        })
+        .catch(error => console.error("Logout error:", error));
+    }
   }
 </script>
+
 </html>
