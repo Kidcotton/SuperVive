@@ -111,6 +111,11 @@
             <li class="nav-item">
               <a class="nav-link" href="adminForum">Support</a>
             </li>
+            {% if 'admin_logged_in' in session %}
+            <li class="nav-item">
+              <a class="nav-link" href="/admin">Admin Dashboard</a>
+            </li>
+            {% endif %}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -133,6 +138,7 @@
             <li class="nav-item">
               <a class="nav-link {% if request.path == '/cart' %}active{% endif %}" href="/cart"><i
                   class="bi bi-cart bi fs-2"></i></a>
+
             </li>
           </ul>
         </div>

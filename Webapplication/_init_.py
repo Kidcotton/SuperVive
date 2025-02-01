@@ -493,11 +493,11 @@ def login():
                 flash('Email not found. Please register first.', 'error')
     return render_template('login_cus.html', form=form)
 
-@app.route('/admin', methods=['GET', 'POST'])
+@app.route('/admin')
 def admin():
     if 'admin_logged_in' not in session:
         flash('Unauthorized access. Please log in as an admin.', 'error')
-        return redirect(url_for('login'))
+        return redirect(url_for('admin_login'))
     users = []
     with shelve.open('users_db') as db:
         for email, details in db.items():
@@ -525,6 +525,7 @@ def admin_login():
         admin_password = request.form.get('password')
         if admin_email == 'admin@example.com' and admin_password == 'adminpassword':
             session['admin_logged_in'] = True
+            session['admin_email'] = admin_email  # Store admin email in session
             flash('Admin logged in successfully!', 'success')
             return redirect(url_for('admin'))
         else:
