@@ -523,9 +523,9 @@ def admin_login():
     if request.method == 'POST':
         admin_email = request.form.get('email')
         admin_password = request.form.get('password')
-        if admin_email == 'admin@example.com' and admin_password == 'adminpassword':
+        if admin_email == 'admin@example.com' and admin_password == 'admin':
             session['admin_logged_in'] = True
-            session['admin_email'] = admin_email  # Store admin email in session
+            session['admin_email'] = admin_email
             flash('Admin logged in successfully!', 'success')
             return redirect(url_for('admin'))
         else:

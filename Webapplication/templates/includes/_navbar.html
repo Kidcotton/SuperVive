@@ -84,11 +84,12 @@
       height: 40px;
       width: auto;
     }
+
     .admin-link {
       color: red !important;
       font-weight: bold;
     }
-    
+
     .admin-link:hover {
       color: darkred !important;
     }
@@ -133,7 +134,9 @@
                 {% endif %}
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                {% if user_email %}
+                {% if 'admin_logged_in' in session %}
+                <a class="dropdown-item" href="#" onclick="confirmLogout()">Logout</a>
+                {% elif user_email %}
                 <a class="dropdown-item" href="#" onclick="confirmLogout()">Logout</a>
                 {% else %}
                 <a class="dropdown-item" href="/signup_cus">Sign up</a>
