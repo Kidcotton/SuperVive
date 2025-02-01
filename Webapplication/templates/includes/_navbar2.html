@@ -72,6 +72,14 @@
       text-decoration: underline;
       color: lightblue !important;
     }
+    .admin-link {
+      color: red !important;
+      font-weight: bold;
+    }
+
+    .admin-link:hover {
+      color: darkred !important;
+    }
   </style>
 </head>
 
@@ -100,7 +108,7 @@
             <a class="nav-link {% if request.path == '/admin' %}active{% endif %}" href="/admin">Manage Users</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/">Back to Homepage</a>
+            <a class="nav-link admin-link" href="/">Back to Homepage</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
