@@ -1,13 +1,21 @@
 <style>
-  .everything {
+  body {
     font-family: calisto;
-    top-margin: 250px;
+    padding-top: 220px;
   }
 
   .company {
     text-align:center;
-    margin-top: 50px;
+    position:absolute;
+    top:170px;
+    width:100%;
+    left:0;
   }
+
+  .company img {
+    width:25px;
+  }
+
 
   #title{
     font-family: Georgia;
@@ -35,7 +43,6 @@
 
   }
 
-  /* Form Styles */
   form {
     max-width: 600px;
     margin: 50px auto;
@@ -75,8 +82,16 @@
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
 
-<div class="everything">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
   <div class="company">
+    <img src="static/images/Computer_company_logo.jpg" alt="Company Logo" >
+    <br>
     <h2>SuperVive &trade;</h2>
   </div>
 
@@ -101,6 +116,5 @@
     </form>
   {% endblock %}
   </div>
-</div>
-
-
+</body>
+</html>

@@ -1,12 +1,19 @@
 <style>
-  .company {
-    text-align: center;
-    padding: 20px;
+  body{
+    padding-top: 200px;
   }
 
   .company img {
-    width: 80px;
-    height: auto;
+    width:25px;
+  }
+
+  .company {
+    padding: 0;
+    text-align:center;
+    position:absolute;
+    top:170px;
+    width:100%;
+    left:0;
   }
 
   .company h7 {
@@ -56,27 +63,37 @@
 {% block title %}Library Loan System - Home{% endblock %}
 
 {% block content %}
-<div class="company">
-  <img src="static/images/Computer_company_logo.jpg" alt="Company Logo">
-  <br>
-  <h7><b>SuperVive &trade;</b></h7>
-</div>
-<div class="container">
-  <h1 class="display-4">Trade-In Information</h1>
-  <br>
-  <div class="details">
-    {% for user in users_list %}
-    <p><b><u>Computer Component:</u></b></p>
-    <p>{{ user.get_pc_component() }}</p>
-    <p><b><u>Types of {{ user.get_pc_component() }}:</u></b></p>
-    <p>{{ user.get_types_component() }}</p>
-    <p><b><u>Condition of {{ user.get_pc_component() }}:</u></b></p>
-    <p>{{ user.get_condition() }}</p>
-    <p><b><u>Remarks:</u></b></p>
-    <p>{{ user.get_remarks() }}</p>
-    <p><b><u>Total Discount:</u></b></p>
-    <p>{{ user.discount }}</p>
-    {% endfor %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <div class="company">
+    <img src="static/images/Computer_company_logo.jpg" alt="Company Logo" >
+    <br>
+    <h7><b>SuperVive &trade;</b></h7>
   </div>
-</div>
-{% endblock %}
+  <div class="container">
+    <h1 class="display-4">Trade-In Information</h1>
+    <br>
+    <div class="details">
+      {% for user in users_list %}
+      <p><b><u>Computer Component:</u></b></p>
+      <p>{{ user.get_pc_component() }}</p>
+      <p><b><u>Types of {{ user.get_pc_component() }}:</u></b></p>
+      <p>{{ user.get_types_component() }}</p>
+      <p><b><u>Condition of {{ user.get_pc_component() }}:</u></b></p>
+      <p>{{ user.get_condition() }}</p>
+      <p><b><u>Remarks:</u></b></p>
+      <p>{{ user.get_remarks() }}</p>
+      <p><b><u>Total Discount:</u></b></p>
+      <p>{{ user.discount }}</p>
+      {% endfor %}
+    </div>
+  </div>
+  {% endblock %}
+</body>
+</html>
