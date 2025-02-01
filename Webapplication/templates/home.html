@@ -22,11 +22,13 @@
             background-image: url('static/images/gaming-pc-banner.jpg');
             background-size: cover;
             background-position: center;
-            padding: 50px;
             text-align: center;
             color: white;
             margin-bottom: 30px;
-            padding-top: 450px;
+            height: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .sales-deals {
@@ -39,15 +41,20 @@
         .card {
             background-color: #444;
             border-radius: 15px;
-            padding: 15px;
             text-align: center;
-            margin: 10px 0;
             color: white;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 15px;
         }
 
         .card img {
             max-width: 100%;
             border-radius: 10px;
+            height: auto;
         }
 
         .discount-badge {
@@ -77,100 +84,95 @@
             color: #28a745;
             font-size: 16px;
         }
-        .modal-title{
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .modal-title {
             color: black;
         }
-        .modal-body{
+
+        .modal-body {
             color: black;
         }
     </style>
 </head>
 
-
 <body>
     <div class="container">
         <div class="hero-section">
-            
+            <h1>Welcome to Gaming Deals</h1>
         </div>
 
         <div class="sales-deals">
             <h2 class="text-center">Sales Deals</h2>
-            <div class="row">
-                
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card position-relative">
-                        <div class="discount-badge">17% OFF</div>
-                        <img src="static/images/rtx-4070.jpg" alt="GeForce RTX 4070 Super">
-                        <div class="card-body">
-                            <h3 class="card-title">GeForce RTX 4070 Super</h3>
-                            <p class="stock-info">Only 500 stocks left!</p>
-                            <p class="price">$499.90 <span class="old-price">$600</span></p>
-                            
-                            <form class="add-to-cart-form" action="/add_to_cart" method="POST">
-                                <input type="hidden" name="product_id" value="CP005">
-                                <button type="submit" class="btn btn-primary">Add to Cart</button>
-                            </form>
-                        </div>
+            <div class="product-grid">
+
+                <div class="card position-relative">
+                    <div class="discount-badge">17% OFF</div>
+                    <img src="static/images/rtx-4070.jpg" alt="GeForce RTX 4070 Super">
+                    <div class="card-body">
+                        <h3 class="card-title">GeForce RTX 4070 Super</h3>
+                        <p class="stock-info">Only 500 stocks left!</p>
+                        <p class="price">$499.90 <span class="old-price">$600</span></p>
+                        <form class="add-to-cart-form" action="/add_to_cart" method="POST">
+                            <input type="hidden" name="product_id" value="CP005">
+                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                        </form>
                     </div>
                 </div>
 
-                
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card position-relative">
-                        <div class="discount-badge">21% OFF</div>
-                        <img src="static/images/gskill-ram.jpg" alt="G.Skill Trident Z5 Neo RGB">
-                        <div class="card-body">
-                            <h3 class="card-title">G.Skill Trident Z5 Neo RGB<br>(2x16GB DDR5-6000)</h3>
-                            <p class="stock-info">Only 700 stocks left!</p>
-                            <p class="price">$189 <span class="old-price">$239</span></p>
-                            
-                            <form class="add-to-cart-form" action="/add_to_cart" method="POST">
-                                <input type="hidden" name="product_id" value="CP006">
-                                <button type="submit" class="btn btn-primary">Add to Cart</button>
-                            </form>
-                        </div>
+                <div class="card position-relative">
+                    <div class="discount-badge">21% OFF</div>
+                    <img src="static/images/gskill-ram.jpg" alt="G.Skill Trident Z5 Neo RGB">
+                    <div class="card-body">
+                        <h3 class="card-title">G.Skill Trident Z5 Neo RGB</h3>
+                        <p class="stock-info">Only 700 stocks left!</p>
+                        <p class="price">$189 <span class="old-price">$239</span></p>
+                        <form class="add-to-cart-form" action="/add_to_cart" method="POST">
+                            <input type="hidden" name="product_id" value="CP006">
+                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                        </form>
                     </div>
                 </div>
 
-                
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card position-relative">
-                        <div class="discount-badge">15% OFF</div>
-                        <img src="static/images/amd-ryzen.jpg" alt="AMD Ryzen 7 9700X" width="200%" >
-                        <div class="card-body">
-                            <h3 class="card-title">AMD Ryzen 7 9700X</h3>
-                            <p class="stock-info">Only 800 stocks left!</p>
-                            <p class="price">$299 <span class="old-price">$349</span></p>
-                            
-                            <form class="add-to-cart-form" action="/add_to_cart" method="POST">
-                                <input type="hidden" name="product_id" value="CP007">
-                                <button type="submit" class="btn btn-primary">Add to Cart</button>
-                            </form>
-                        </div>
+                <div class="card position-relative">
+                    <div class="discount-badge">15% OFF</div>
+                    <img src="static/images/amd-ryzen.jpg" alt="AMD Ryzen 7 9700X">
+                    <div class="card-body">
+                        <h3 class="card-title">AMD Ryzen 7 9700X</h3>
+                        <p class="stock-info">Only 800 stocks left!</p>
+                        <p class="price">$299 <span class="old-price">$349</span></p>
+                        <form class="add-to-cart-form" action="/add_to_cart" method="POST">
+                            <input type="hidden" name="product_id" value="CP007">
+                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                        </form>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card position-relative">
-                        <div class="discount-badge">15% OFF</div>
-                        <img src="static/images/gpu_nvidia_gtx_1660.jpg" alt="Nvidia gtx 1660 gpu" width="200%" >
-                        <div class="card-body">
-                            <h3 class="card-title">Nvidia gtx 1660 gpu</h3>
-                            <p class="stock-info">Only 800 stocks left!</p>
-                            <p class="price">$400 <span class="old-price">$500</span></p>
-                            
-                            <form class="add-to-cart-form" action="/add_to_cart" method="POST">
-                                <input type="hidden" name="product_id" value="CP002">
-                                <button type="submit" class="btn btn-primary">Add to Cart</button>
-                            </form>
-                        </div>
+
+                <div class="card position-relative">
+                    <div class="discount-badge">15% OFF</div>
+                    <img src="static/images/gpu_nvidia_gtx_1660.jpg" alt="Nvidia GTX 1660 GPU">
+                    <div class="card-body">
+                        <h3 class="card-title">Nvidia GTX 1660 GPU</h3>
+                        <p class="stock-info">Only 800 stocks left!</p>
+                        <p class="price">$400 <span class="old-price">$500</span></p>
+                        <form class="add-to-cart-form" action="/add_to_cart" method="POST">
+                            <input type="hidden" name="product_id" value="CP002">
+                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                        </form>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
-
 
 <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -190,13 +192,10 @@
     </div>
 </div>
 <script>
-    
     document.querySelectorAll('.add-to-cart-form').forEach(form => {
         form.addEventListener('submit', function(event) {
-            event.preventDefault(); 
-            
+            event.preventDefault();
             const formData = new FormData(form);
-            
             fetch('/add_to_cart', {
                 method: 'POST',
                 body: formData
@@ -207,7 +206,7 @@
                     var myModal = new bootstrap.Modal(document.getElementById('cartModal'));
                     myModal.show();
                 } else {
-                    alert(data.message); 
+                    alert(data.message);
                 }
             });
         });
