@@ -17,6 +17,28 @@ def initialize_cart():
     if 'cart' not in session:
         session['cart'] = []
 
+@app.route('/prebuilds')
+def prebuilds():
+    return render_template('prebuild.html')
+
+@app.route('/update_cart_quantity', methods=['POST'])
+def update_cart_quantity():
+    item_id = request.json.get('item_id')
+    action = request.json.get('action')  # 'increase' or 'decrease'
+
+    cart = session.get('cart', [])
+
+    for item in cart:
+        if item['id'] == item_id:
+            if action == 'increase':
+                item['quantity'] += 1
+            elif action == 'decrease' and item['quantity'] > 1:
+                item['quantity'] -= 1
+            break  # Stop loop once item is found and updated
+
+    session['cart'] = cart
+    return jsonify(success=True, cart=cart)
+
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
     product_id = request.form['product_id']
@@ -37,11 +59,12 @@ def add_to_cart():
             if found_item:
                 found_item['quantity'] += 1
             else:
+                image_path = product.get('image', '')
                 cart.append({
                     'id': product_id,
                     'name': product['name'],
                     'price': product['price'],
-                    'image': product['image'],
+                    'image': image_path,
                     'quantity': 1
                 })
             session['cart'] = cart
@@ -198,6 +221,39 @@ def populate():
             'stock': 100,
             'image': 'static/images/amd-ryzen.jpg',
             'description': 'AMD Ryzen 7 9700X processor'
+        }
+        db['PB001'] = {
+            'name': 'The Average',
+            'price': 715.0,
+            'stock': 10,  
+            'image': 'images/average_pc.jpg',
+            'description': 'Ryzen 5 5600 + GeForce RTX 3050',
+            'components': [
+                "AMD Ryzen 5 5600 Processor",
+                "AMD Wraith Stealth Cooler",
+                "Gigabyte B550M DS3H AC Rev1.7",
+                "Zotac RTX 3050 Solo - 6GB",
+                "16GB Lexar Ares RGB DDR4 3600MHz (8x2)",
+                "1TB Klevv C910 Gen4 SSD",
+                "550W Gigabyte 80+ Silver (ATX3.0)"
+            ]
+        }
+
+        db['PB002'] = {
+            'name': 'The Monster',
+            'price': 2015.0,
+            'stock': 5,  
+            'image': 'images/monster_pc.jpg',
+            'description': 'Ryzen 7 7800X3D + GeForce RTX 4070 SUPER',
+            'components': [
+                "AMD Ryzen 7 7800X3D Processor",
+                "Deepcool AK400 DIGITAL",
+                "Gigabyte B650M Gaming Wifi",
+                "Gigabyte RTX 4070 Super Windforce OC - 12GB",
+                "32GB Lexar Thor RGB DDR5 6000MHz CL38 (16x2)",
+                "1TB Klevv C910 Gen4 SSD",
+                "850W Thermaltight 80+ Gold"
+            ]
         }
     flash('Database populated!', 'success')
     return redirect(url_for('index'))
