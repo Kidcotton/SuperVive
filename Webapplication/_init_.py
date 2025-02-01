@@ -24,7 +24,7 @@ def prebuilds():
 @app.route('/update_cart_quantity', methods=['POST'])
 def update_cart_quantity():
     item_id = request.json.get('item_id')
-    action = request.json.get('action')  # 'increase' or 'decrease'
+    action = request.json.get('action')  
 
     cart = session.get('cart', [])
 
@@ -34,7 +34,7 @@ def update_cart_quantity():
                 item['quantity'] += 1
             elif action == 'decrease' and item['quantity'] > 1:
                 item['quantity'] -= 1
-            break  # Stop loop once item is found and updated
+            break 
 
     session['cart'] = cart
     return jsonify(success=True, cart=cart)
