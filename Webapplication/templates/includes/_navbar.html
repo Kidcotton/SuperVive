@@ -16,7 +16,7 @@
     .navbar-brand {
       font-family: 'Arial', sans-serif;
       font-size: 24px;
-      color: white;
+      color: white !important;
       font-weight: bold;
     }
 
@@ -84,11 +84,19 @@
       height: 40px;
       width: auto;
     }
+    .admin-link {
+      color: red !important;
+      font-weight: bold;
+    }
+    
+    .admin-link:hover {
+      color: darkred !important;
+    }
   </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
+  <nav class="navbar navbar-expand-lg bg-dark fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand d-flex align-items-center fs-3" href="/">
         <img src="/static/images/image.png" alt="SuperVive Logo" class="logo-img">
@@ -106,14 +114,14 @@
               <a class="nav-link {% if request.path == '/prebuilds' %}active{% endif %}" href="/prebuilds">Pre-build</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/findus">Find-Us</a>
+              <a class="nav-link {% if request.path == '/findus' %}active{% endif %}" href="/findus">Find-Us</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="adminForum">Support</a>
             </li>
             {% if 'admin_logged_in' in session %}
             <li class="nav-item">
-              <a class="nav-link" href="/admin">Admin Dashboard</a>
+              <a class="nav-link admin-link" href="/admin">Admin Dashboard</a>
             </li>
             {% endif %}
             <li class="nav-item dropdown">
