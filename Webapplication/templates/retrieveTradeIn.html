@@ -2,6 +2,7 @@
     .container {
       min-height: 100vh;
       padding: 2rem;
+      top-margin: 250px;
       background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
       background-attachment: fixed;
     }
@@ -30,9 +31,10 @@
 
 
 
-{% extends "base.html" %}
+{% extends "base2.html" %}
 {% block title %}Library Loan System - Retrieve Users{% endblock %}
 {% block content %}
+
 <h1 class="display-4">Retrieve Trade-Ins</h1>
 <div>
 {% if count == 0 %}
