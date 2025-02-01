@@ -1,12 +1,16 @@
 <style>
-  .everything {
+
+  body {
     font-family: calisto;
-    top-margin: 250px;
+    padding-top: 200px;
   }
 
   .company {
     text-align:center;
-    margin-top: 50px;
+    position:absolute;
+    top:170px;
+    width:100%;
+    left:0;
   }
 
   #title{
@@ -75,7 +79,13 @@
 {% block content %}
 {% from "includes/_formHelper.html" import render_field %}
 
-<div class="everything">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
   <div class="company">
     <h2>SuperVive &trade;</h2>
   </div>
@@ -101,6 +111,5 @@
     </form>
   {% endblock %}
   </div>
-</div>
-
-
+</body>
+</html>
