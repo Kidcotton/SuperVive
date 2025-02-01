@@ -184,7 +184,7 @@ def populate():
             'name': 'GPU NVIDIA GTX 1660',
             'price': 400.0,
             'stock': 30,
-            'image': 'gpu_nvidia_gtx_1660.jpg',
+            'image': 'images/gpu_nvidia_gtx_1660.jpg',
             'description': 'NVIDIA GTX 1660 graphics card'
         }
         db['CP003'] = {
@@ -212,14 +212,14 @@ def populate():
             'name': 'G.Skill Trident Z5 Neo RGB (2x16GB DDR5-6000)',
             'price': 189.00,
             'stock': 30,
-            'image': 'static/images/gskill-ram.jpg',
+            'image': 'images/gskill-ram.jpg',
             'description': 'G.Skill Trident Z5 Neo RGB RAM'
         }
         db['CP007'] = {
             'name': 'AMD Ryzen 7 9700X',
             'price': 299.00,
             'stock': 100,
-            'image': 'static/images/amd-ryzen.jpg',
+            'image': 'images/amd-ryzen.jpg',
             'description': 'AMD Ryzen 7 9700X processor'
         }
         db['PB001'] = {
