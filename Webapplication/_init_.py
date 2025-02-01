@@ -531,6 +531,10 @@ def admin_login():
             flash('Invalid admin credentials.', 'error')
     return render_template('admin_login.html')
 
+@app.route('/findus')
+def findus():
+    return render_template('findus.html')
+
 @app.route('/admin_logout')
 def admin_logout():
     session.clear()  
