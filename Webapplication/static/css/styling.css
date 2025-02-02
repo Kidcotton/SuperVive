@@ -1,28 +1,28 @@
-/* General body and background styling */
+
 body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background: #2c2c2c; /* Dark gray background */
-    color: #fff; /* White text color */
+    background: #2c2c2c; 
+    color: #fff; 
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* Card container styling */
+
 .card {
-    background: #000; /* Black background for the card */
-    border-radius: 15px; /* Rounded corners */
+    background: #000; 
+    border-radius: 15px; 
     padding: 30px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); 
     width: 100%;
-    max-width: 400px; /* Limit the width for consistency */
-    border: 3px solid #5b00ff; /* Purple border */
+    max-width: 400px; 
+    border: 3px solid #5b00ff; 
 }
 
-/* Form input fields */
+
 form input {
     width: 100%;
     padding: 10px;
@@ -31,23 +31,22 @@ form input {
     border: none;
     outline: none;
     font-size: 16px;
-    background: #f0f0f0; /* Light gray input background */
-    color: #000; /* Black text for inputs */
+    background: #f0f0f0; 
+    color: #000; 
 }
 
-/* Labels for form fields */
 form label {
     font-size: 14px;
     margin-bottom: 5px;
     display: block;
-    color: #ddd; /* Light gray text */
+    color: #ddd; 
 }
 
-/* Submit button styling */
+
 form input[type="submit"] {
     width: 100%;
     padding: 10px;
-    background: #a50000; /* Red button background */
+    background: #a50000; 
     color: #fff;
     font-size: 16px;
     font-weight: bold;
@@ -58,17 +57,17 @@ form input[type="submit"] {
 }
 
 form input[type="submit"]:hover {
-    background: #ff0000; /* Bright red on hover */
+    background: #ff0000; 
 }
 
-/* Link styling */
+
 form a {
-    color: #ddd; /* Light gray text */
+    color: #ddd; 
     text-decoration: none;
 }
 
 form a:hover {
-    color: #fff; /* White text on hover */
+    color: #fff; 
 }
 .position-absolute {
     color: black;
@@ -77,4 +76,4 @@ form a:hover {
     transform: translateY(-50%);
     right: 10px;
 }
-/* Heading
+

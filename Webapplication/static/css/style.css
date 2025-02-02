@@ -1,16 +1,14 @@
-/* General body and background styling */
+
 body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
     background: #2c2c2c;
-    /* Dark gray background */
     color: #fff;
-    /* White text */
     height: 100vh;
 }
 
-/* Centering the login form */
+
 .container {
     display: flex;
     justify-content: center;
@@ -18,17 +16,15 @@ body {
     height: 100vh;
 }
 
-/* Card styling */
+
 .card {
     background: #000;
-    /* Pure black background */
     border-radius: 15px;
     padding: 30px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    /* Subtle shadow */
+
 }
 
-/* Form input fields */
 form input {
     width: 100%;
     padding: 10px;
@@ -38,26 +34,20 @@ form input {
     outline: none;
     font-size: 16px;
     background: #f0f0f0;
-    /* Light gray input background */
     color: #000;
-    /* Dark text */
 }
 
-/* Labels for form fields */
 form label {
     font-size: 14px;
     margin-bottom: 5px;
     display: block;
     color: #ddd;
-    /* Lighter text color */
 }
 
-/* Buttons */
 form button[type="submit"] {
     width: 100%;
     padding: 10px;
     background: #a50000;
-    /* Red button background */
     color: #fff;
     font-size: 16px;
     font-weight: bold;
@@ -68,22 +58,17 @@ form button[type="submit"] {
 
 form button[type="submit"]:hover {
     background: #ff0000;
-    /* Bright red hover effect */
 }
 
-/* Links */
 form a {
     color: #ddd;
-    /* Lighter text for links */
     text-decoration: none;
 }
 
 form a:hover {
     color: #fff;
-    /* White text on hover */
 }
 
-/* Flash message list styling */
 ul {
     list-style: none;
     padding: 0;
@@ -91,10 +76,8 @@ ul {
 
 li.error {
     color: #ff4c4c;
-    /* Red text for error messages */
 }
 
-/* Align footer links */
 p {
     text-align: center;
     margin-top: 10px;
@@ -109,7 +92,6 @@ p a {
     color: black;
     cursor: pointer;
     top: 73%;
-    /* Adjust this value to push the icon lower */
     transform: translateY(-50%);
     right: 10px;
 }
