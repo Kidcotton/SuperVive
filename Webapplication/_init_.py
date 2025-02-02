@@ -177,7 +177,7 @@ def populate():
             'name': 'CPU Intel i5',
             'price': 200.0,
             'stock': 50,
-            'image': 'cpu_intel_i5.jpg',
+            'image': 'images/cpu_intel_i5.jpg',
             'description': 'Intel i5 processor'
         }
         db['CP002'] = {

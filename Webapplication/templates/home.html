@@ -23,7 +23,7 @@
             background-size: cover;
             background-position: center;
             text-align: center;
-            color: white;
+            color:#007BFF;
             margin-bottom: 30px;
             height: 450px;
             display: flex;
@@ -98,13 +98,18 @@
         .modal-body {
             color: black;
         }
+        .card img {
+            height: 250px; 
+            object-fit: cover; 
+            width: 100%; 
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <div class="hero-section">
-            <h1>Welcome to Gaming Deals</h1>
+            <h1>Welcome to SuperVive</h1>
         </div>
 
         <div class="sales-deals">
@@ -159,9 +164,35 @@
                     <div class="card-body">
                         <h3 class="card-title">Nvidia GTX 1660 GPU</h3>
                         <p class="stock-info">Only 800 stocks left!</p>
-                        <p class="price">$400 <span class="old-price">$500</span></p>
+                        <p class="price">$400 <span class="old-price">$460</span></p>
                         <form class="add-to-cart-form" action="/add_to_cart" method="POST">
                             <input type="hidden" name="product_id" value="CP002">
+                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card position-relative">
+                    <div class="discount-badge">17% OFF</div>
+                    <img src="static/images/cpu_intel_i5.jpg" alt="CPU Intel i5">
+                    <div class="card-body">
+                        <h3 class="card-title">CPU Intel i5</h3>
+                        <p class="stock-info">Only 300 stocks left!</p>
+                        <p class="price">$200 <span class="old-price">$234</span></p>
+                        <form class="add-to-cart-form" action="/add_to_cart" method="POST">
+                            <input type="hidden" name="product_id" value="CP001">
+                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card position-relative">
+                    <div class="discount-badge">14% OFF</div>
+                    <img src="static/images/ram_16gb_ddr4.jpg" alt="RAM 16GB DDR4">
+                    <div class="card-body">
+                        <h3 class="card-title">RAM 16GB DDR4</h3>
+                        <p class="stock-info">Only 100 stocks left!</p>
+                        <p class="price">$68.80 <span class="old-price">$80</span></p>
+                        <form class="add-to-cart-form" action="/add_to_cart" method="POST">
+                            <input type="hidden" name="product_id" value="CP003">
                             <button type="submit" class="btn btn-primary">Add to Cart</button>
                         </form>
                     </div>
