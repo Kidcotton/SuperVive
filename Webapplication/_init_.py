@@ -191,7 +191,7 @@ def populate():
             'name': 'RAM 16GB DDR4',
             'price': 80.0,
             'stock': 100,
-            'image': 'ram_16gb_ddr4.jpg',
+            'image': 'images/ram_16gb_ddr4.jpg',
             'description': '16GB DDR4 RAM'
         }
         db['CP004'] = {
