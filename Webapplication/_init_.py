@@ -255,7 +255,6 @@ def populate():
                 "850W Thermaltight 80+ Gold"
             ]
         }
-    flash('Database populated!', 'success')
     return redirect(url_for('index'))
 
 @app.route('/details')
