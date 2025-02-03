@@ -498,7 +498,12 @@ def reset_password():
                 return redirect(url_for('forgot_password'))
     return render_template('reset_password.html', form=form)
 
-
+@app.route('/contactUs')
+def contact_us():
+    return render_template('contactUs.html')
+@app.route('/customerForum')
+def customerForum():
+    return render_template('customerForum.html')
 
 @app.route('/signup_cus', methods=['GET', 'POST'])
 def signup_cus():
@@ -598,6 +603,8 @@ def logout():
 @app.context_processor
 def inject_user():
     return dict(user_email=session.get('email'))
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
