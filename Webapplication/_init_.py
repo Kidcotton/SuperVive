@@ -505,6 +505,11 @@ def contact_us():
 def customerForum():
     return render_template('customerForum.html')
 
+@app.route('/adminForum')
+def adminForum():
+    return render_template('adminForum.html')
+
+
 @app.route('/signup_cus', methods=['GET', 'POST'])
 def signup_cus():
     form = SignUpForm(request.form)

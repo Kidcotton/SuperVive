@@ -2,24 +2,120 @@
 {% block title %}Library Loan System - Customer Forum{% endblock %}
 
 {% block content %}
-<h1>Customer Comments</h1>
+
+<style>
+    /* General Page Styling */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1, h2 {
+        color: #2c3e50;
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    h2 {
+        margin-top: 20px;
+    }
+
+    /* Styling the Comment Form */
+    .comment-form {
+        width: 80%;
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-input, .form-textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+        border-color: #3498db;
+        outline: none;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 10px;
+        background-color: red;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .btn-submit:hover {
+        background-color: #2980b9;
+    }
+
+    /* Styling the Comments List */
+    .comments-list {
+        list-style-type: none;
+        padding: 0;
+        max-width: 800px;
+        margin: 20px auto;
+    }
+
+    .comment-item {
+        background-color: #fff;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .comment-author {
+        font-weight: bold;
+        color: #2c3e50;
+    }
+
+    .comment-text {
+        color: #555;
+    }
 
 
-<form method="POST" action="">
-    <input type="text" name="name" placeholder="Your Name" required><br><br>
-    <textarea name="comment" placeholder="Your Comment" required></textarea><br><br>
-    <input type="submit" value="Submit" class="btn btn-primary"/>
-</form>
+
+</style>
 
 
-<h2>All Comments</h2>
-<ul>
-    {% for comment in comments %}
-    <li>
-        <strong>{{ comment.name }}</strong>: {{ comment.comment }}
-    </li>
-    {% endfor %}
-</ul>
+<body>
+    <h1>Customer Comments</h1>
+
+    <!-- Comment Form -->
+    <form method="POST" action="" class="comment-form">
+        <input type="text" name="name" placeholder="Your Name" required class="form-input"><br><br>
+        <textarea name="comment" placeholder="Your Comment" required class="form-textarea"></textarea><br><br>
+        <input type="submit" value="Submit" class="btn-submit">
+    </form>
+
+    <!-- Displaying all comments -->
+    <h2>All Comments</h2>
+    <ul class="comments-list">
+        {% for comment in comments %}
+            <li class="comment-item">
+                <strong class="comment-author">{{ comment.name }}</strong>: <span class="comment-text">{{ comment.comment }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}
 
-
+</body>
