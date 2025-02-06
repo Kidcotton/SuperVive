@@ -5,6 +5,7 @@ from SignupForm import SignUpForm
 from Form import Login
 from Forms import CreateUserForm, CreateCustomerForm
 from User import User
+from Form import AdminSignUpForm
 from wtforms import Form, StringField, PasswordField, validators
 
 app = Flask(__name__)
@@ -38,11 +39,43 @@ def update_cart_quantity():
 
     session['cart'] = cart
     return jsonify(success=True, cart=cart)
+@app.route('/submit_review', methods=['POST'])
+def submit_review():
+    data = request.get_json()
+    product_id = data.get('product_id')
+    rating = int(data.get('rating', 0))
+    comment = data.get('comment', '')
+
+    if not product_id or rating < 1 or rating > 5:
+        return jsonify(success=False, message="Invalid input")
+
+    with shelve.open(DATABASE, writeback=True) as db:
+        if product_id not in db:
+            return jsonify(success=False, message="Product not found")
+
+        product = db[product_id]
+        if 'reviews' not in product:
+            product['reviews'] = []
+        
+        product['reviews'].append({'rating': rating, 'comment': comment})
+        
+        # Calculate average rating
+        total_ratings = sum(r['rating'] for r in product['reviews'])
+        product['average_rating'] = round(total_ratings / len(product['reviews']), 1)
+
+        db[product_id] = product
+
+    return jsonify(success=True, average_rating=product['average_rating'], reviews=product['reviews'])
+
+
+
 @app.route('/preview/<product_id>')
 def preview(product_id):
     with shelve.open(DATABASE) as db:
         if product_id in db:
             product = db[product_id]
+            product['reviews'] = product.get('reviews', [])
+            product['average_rating'] = product.get('average_rating', 0)
             return render_template('preview.html', product=product, product_id=product_id)
         else:
             flash('Product not found!', 'error')
@@ -180,21 +213,21 @@ def populate():
             'price': 200.0,
             'stock': 50,
             'image': 'images/cpu_intel_i5.jpg',
-            'description': 'Intel i5 processor'
+            'description': 'The Intel Core i5 is a versatile mid-range processor offering strong multi-core performance. Ideal for gaming, content creation, and everyday tasks, it balances efficiency with power to keep your PC running smoothly.'
         }
         db['CP002'] = {
             'name': 'GPU NVIDIA GTX 1660',
             'price': 400.0,
             'stock': 30,
             'image': 'images/gpu_nvidia_gtx_1660.jpg',
-            'description': 'NVIDIA GTX 1660 graphics card'
+            'description': 'The Nvidia GTX 1660 is a budget-friendly yet powerful GPU, providing solid performance for 1080p gaming. With great value for money, it’s an ideal choice for gamers looking for smooth performance without breaking the bank.'
         }
         db['CP003'] = {
             'name': 'RAM 16GB DDR4',
             'price': 80.0,
             'stock': 100,
             'image': 'images/ram_16gb_ddr4.jpg',
-            'description': '16GB DDR4 RAM'
+            'description': 'Upgrade your PC with 16GB of DDR4 RAM for enhanced multitasking and faster performance. This reliable and high-speed memory is perfect for gaming, video editing, and handling heavy workloads without lag.'
         }
         db['CP004'] = {
             'name': 'Motherboard ASUS Prime',
@@ -208,21 +241,21 @@ def populate():
             'price': 499.90,
             'stock': 50,
             'image': 'images/rtx-4070.jpg',
-            'description': 'GeForce RTX 4070 Super graphics card'
+            'description': 'The GeForce RTX 4070 Super is a high-performance graphics card designed for gamers and content creators. With cutting-edge ray tracing and AI-enhanced graphics, it delivers ultra-smooth gameplay and stunning visuals for the latest titles.'
         }
         db['CP006'] = {
             'name': 'G.Skill Trident Z5 Neo RGB (2x16GB DDR5-6000)',
             'price': 189.00,
             'stock': 30,
             'image': 'images/gskill-ram.jpg',
-            'description': 'G.Skill Trident Z5 Neo RGB RAM'
+            'description': 'Elevate your system with the G.Skill Trident Z5 Neo RGB memory. This 16GB DDR5 kit combines stunning RGB lighting with exceptional speed, perfect for high-end gaming, overclocking, and multitasking.'
         }
         db['CP007'] = {
             'name': 'AMD Ryzen 7 9700X',
             'price': 299.00,
             'stock': 100,
             'image': 'images/amd-ryzen.jpg',
-            'description': 'AMD Ryzen 7 9700X processor'
+            'description': 'The AMD Ryzen 7 9700X offers a powerful 8-core, 16-thread architecture, delivering incredible performance for demanding applications like gaming, video editing, and 3D rendering. Experience speed and efficiency at its finest.'
         }
         db['PB001'] = {
             'name': 'The Average',
@@ -577,20 +610,88 @@ def delete_user(email):
             flash('User not found.', 'error')
     return redirect(url_for('admin'))
 
+
+
+@app.route('/admin_signup', methods=['GET', 'POST'])
+def admin_signup():
+    form = AdminSignUpForm(request.form)
+    
+    if request.method == 'POST' and form.validate():
+        email = form.email.data
+        password = form.password.data
+
+        # Store the admin data in shelve, using the email as the key
+        with shelve.open('admin_db', writeback=True) as db:
+            # Check if the admin email already exists in the database
+            if email in db:
+                flash('Admin account already exists!', 'error')
+                return redirect(url_for('admin_signup'))
+            
+            # Save the admin data with email as the key
+            db[email] = {'email': email, 'password': password}
+            flash("Admin account created successfully!", 'success')
+            return redirect(url_for('admin_login'))  # Redirect to login after successful signup
+    
+    return render_template('admin_signup.html', form=form)
+
+
 @app.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
         admin_email = request.form.get('email')
         admin_password = request.form.get('password')
-        if admin_email == 'admin@example.com' and admin_password == 'admin':
-            session['admin_logged_in'] = True
-            session['admin_email'] = admin_email
-            flash('Admin logged in successfully!', 'success')
-            return redirect(url_for('admin'))
-        else:
-            flash('Invalid admin credentials.', 'error')
+
+        # Retrieve the admin credentials from the shelve database
+        with shelve.open('admin_db') as db:
+            # Check if the provided email exists in the database
+            admin_data = db.get(admin_email, None)
+
+            if admin_data:
+                # Validate credentials from the database
+                if admin_password == admin_data['password']:
+                    session['admin_logged_in'] = True
+                    session['admin_email'] = admin_email
+                    flash('Admin logged in successfully!', 'success')
+                    return redirect(url_for('admin'))  # Redirect to the admin dashboard page
+                else:
+                    flash('Invalid password. Please try again.', 'error')
+            else:
+                flash('Admin email not found. Please check your email or sign up.', 'error')
+
     return render_template('admin_login.html')
 
+
+@app.route('/delete_review', methods=['POST'])
+def delete_review():
+    if 'admin_logged_in' not in session:
+        return jsonify(success=False, message="Unauthorized access.")
+
+    data = request.get_json()
+    product_id = data.get('product_id')
+    comment_index = int(data.get('comment_index', -1))
+
+    with shelve.open(DATABASE, writeback=True) as db:
+        if product_id not in db:
+            return jsonify(success=False, message="Product not found.")
+
+        product = db[product_id]
+
+        if 'reviews' not in product or comment_index < 0 or comment_index >= len(product['reviews']):
+            return jsonify(success=False, message="Invalid review index.")
+
+        # Remove the review
+        del product['reviews'][comment_index]
+
+        # Recalculate the average rating
+        if product['reviews']:
+            total_ratings = sum(r['rating'] for r in product['reviews'])
+            product['average_rating'] = round(total_ratings / len(product['reviews']), 1)
+        else:
+            product['average_rating'] = 0  # No ratings left
+
+        db[product_id] = product
+        return jsonify(success=True, average_rating=product['average_rating'], reviews=product['reviews'])
+    
 @app.route('/findus')
 def findus():
     return render_template('findus.html')

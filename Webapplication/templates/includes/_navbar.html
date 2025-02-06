@@ -6,12 +6,6 @@
   <title>NavBar</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
-    .navbar {
-      background-image: url('static/images/real.jpg');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-    }
 
     .navbar-brand {
       font-family: 'Arial', sans-serif;
@@ -21,16 +15,25 @@
     }
 
     .navbar-nav .nav-link {
-      color: white;
+      color: white !important;
       font-family: 'Arial', sans-serif;
       font-size: 16px;
       font-weight: bold;
       padding-right: 20px;
       padding-left: 20px;
+      position: relative; /* Needed for the underline effect */
     }
 
     .navbar-nav .nav-link:hover {
       color: #ccc;
+      background-color: rgba(255, 255, 255, 0.2); /* Light background on hover */
+      border-radius: 5px; /* Optional: adds rounded corners on hover */
+    }
+
+    .navbar-nav .nav-link.active {
+      color: white !important;
+      text-decoration: underline; /* Adds the underline on active */
+      text-underline-position: under; /* Ensures the underline appears under the text */
     }
 
     .navbar-icons .nav-link img {
@@ -73,11 +76,6 @@
     .dropdown-menu {
       left: auto;
       right: 0;
-    }
-
-    .navbar-nav .nav-link.active {
-      text-decoration: underline;
-      color: blue !important;
     }
 
     .logo-img {
@@ -131,6 +129,12 @@
               <a class="nav-link admin-link" href="/admin">Admin Dashboard</a>
             </li>
             {% endif %}
+
+            <!-- Swapping Cart and Person Icon Section -->
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == '/cart' %}active{% endif %}" href="/cart"><i
+                  class="bi bi-cart bi fs-2"></i></a>
+            </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -151,11 +155,6 @@
                 <a class="dropdown-item" href="/admin_login">Admin login</a>
                 {% endif %}
               </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link {% if request.path == '/cart' %}active{% endif %}" href="/cart"><i
-                  class="bi bi-cart bi fs-2"></i></a>
-
             </li>
           </ul>
         </div>

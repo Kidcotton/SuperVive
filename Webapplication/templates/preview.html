@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Preview - Gaming Deals</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">  <!-- FA Icons -->
     <style>
         .navbar {
             background-image: url('static/images/real.jpg');
@@ -19,6 +19,17 @@
             background-size: cover;
             background-position: center;
         }
+
+        .star-rating i {
+            font-size: 1.5rem;
+            color: #ccc; /* Default color for unselected stars (light gray) */
+            cursor: pointer;
+        }
+        
+        .star-rating i.selected, .star-rating i.fa-solid {
+            color: #ffc107; /* Yellow color for selected stars */
+        }
+        
 
         .navbar-brand {
             font-family: 'Arial', sans-serif;
@@ -52,6 +63,8 @@
 
         .product-details img {
             max-width: 100%;
+            height: 300px;
+            object-fit: cover;
             border-radius: 10px;
         }
 
@@ -93,40 +106,122 @@
             text-align: center;
             color: black;
         }
-        .modal-title{
+
+        .modal-title {
             color: black;
         }
-       
-        
-        
+
+        .star-rating {
+            display: flex;
+            direction: row;
+            justify-content: flex-start;
+            gap: 5px;
+        }
+
+        .star-rating i {
+            font-size: 1.5rem;
+            color: #ccc;
+            cursor: pointer;
+        }
+
+        .star-rating i.selected {
+            color: #ffc107;
+        }
+
+        .comments-section {
+            margin-top: 40px;
+            background-color: #444;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .comment-box {
+            width: 100%;
+            height: 100px;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            background-color: #222;
+            color: #fff;
+        }
+
+        .comment-list {
+            margin-top: 20px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .comment-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #555;
+            border-radius: 5px;
+        }
+
+        .comment-item p {
+            margin: 0;
+        }
     </style>
 </head>
 
 <body>
-    <div class="container product-details">
-        <div class="row">
-            <div class="col-md-6">
-                <img src="static/{{ product.image }}" alt="{{ product.name }}">
-            </div>
-            <div class="col-md-6">
-                <h2>{{ product.name }}</h2>
-                <p>{{ product.description }}</p>
-                <ul class="component-list">
-                    {% for component in product.components %}
+    <div class="container">
+        <div class="container product-details">
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+                </div>
+                <div class="col-md-6">
+                    <h2>{{ product.name }}</h2>
+                    <p>{{ product.description }}</p>
+                    <ul class="component-list">
+                        {% for component in product.components %}
                         <li class="component-item">{{ component }}</li>
+                        {% endfor %}
+                    </ul>
+                    <p class="price">${{ product.price }}</p>
+                    <div class="quantity-controls">
+                        <button class="btn btn-secondary" onclick="updateQuantity(-1)">−</button>
+                        <span id="quantity">1</span>
+                        <button class="btn btn-secondary" onclick="updateQuantity(1)">+</button>
+                    </div>
+                    <button id="add-to-cart" class="btn btn-primary mt-3" data-product-id="{{ product_id }}">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="reviews-section mt-5">
+            <h3>Rate This Product</h3>
+            <div class="star-rating" id="rating-stars">
+                {% for i in range(1, 6) %}
+                <i class="fa-regular fa-star" data-value="{{ i }}"></i> <!-- Unclicked star (empty) -->
+                {% endfor %}
+            </div>
+            <p id="average-rating">Average Rating: {{ product.average_rating }} ⭐</p>
+
+            <div class="comments-section mt-4">
+                <h3>Comments</h3>
+                <textarea id="comment-box" class="comment-box" placeholder="Write a comment..."></textarea>
+                <button id="submit-comment" class="btn btn-primary mt-3">Submit Review</button>
+                
+                <ul class="comment-list mt-3" id="comment-list">
+                    {% for review in product.reviews %}
+                    <li class="comment-item" data-index="{{ loop.index0 }}">
+                        <p>⭐ {{ review.rating }} - {{ review.comment }}</p>
+                        {% if session.get('admin_logged_in') %}  <!-- Only show delete button for admins -->
+                        <button class="btn btn-danger btn-sm delete-review" data-index="{{ loop.index0 }}" data-product-id="{{ product_id }}">
+                            Delete
+                        </button>
+                        {% endif %}
+                    </li>
                     {% endfor %}
                 </ul>
-                <p class="price">${{ product.price }}</p>
-                <div class="quantity-controls">
-                    <button class="btn btn-secondary" onclick="updateQuantity(-1)">−</button>
-                    <span id="quantity">1</span>
-                    <button class="btn btn-secondary" onclick="updateQuantity(1)">+</button>
-                </div>
-                <button id="add-to-cart" class="btn btn-primary mt-3" data-product-id="{{ product_id }}">Add to Cart</button>
             </div>
         </div>
     </div>
 
+    <!-- Modal for cart -->
     <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -143,8 +238,112 @@
         </div>
     </div>
 
+    <!-- Bootstrap Toast Notification -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="commentToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Your comment has been submitted successfully! 🎉
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
+        document.querySelectorAll('.delete-review').forEach(button => {
+            button.addEventListener('click', function () {
+                const commentIndex = this.getAttribute('data-index');
+                const productId = this.getAttribute('data-product-id');
+    
+                fetch('/delete_review', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ product_id: productId, comment_index: commentIndex })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('average-rating').textContent = `Average Rating: ${data.average_rating} ⭐`;
+    
+                        // Remove the deleted comment from UI
+                        this.parentElement.remove();
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(err => console.error('Error:', err));
+            });
+        });
+        let selectedRating = 0;
+
+document.querySelectorAll('.star-rating i').forEach(star => {
+    star.addEventListener('click', function () {
+        const currentValue = this.getAttribute('data-value');
+        
+        // If the star clicked is already selected, unselect it
+        if (selectedRating === currentValue) {
+            // Reset selected stars
+            document.querySelectorAll('.star-rating i').forEach(s => {
+                s.classList.remove('fa-solid');
+                s.classList.add('fa-regular'); // Uncheck all stars
+            });
+            selectedRating = 0;  // Reset selected rating
+        } else {
+            // Update the selected rating
+            selectedRating = currentValue;
+
+            // Set all stars before the selected one to solid (yellow)
+            document.querySelectorAll('.star-rating i').forEach(s => {
+                if (parseInt(s.getAttribute('data-value')) <= selectedRating) {
+                    s.classList.remove('fa-regular');
+                    s.classList.add('fa-solid'); // Make stars yellow
+                } else {
+                    s.classList.remove('fa-solid');
+                    s.classList.add('fa-regular'); // Uncheck remaining stars
+                }
+            });
+        }
+    });
+});
+
+
+
+        document.getElementById('submit-comment').addEventListener('click', function () {
+            const comment = document.getElementById('comment-box').value;
+            if (!selectedRating || comment.trim() === '') {
+                return; // Do nothing if input is invalid
+            }
+
+            fetch('/submit_review', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    product_id: '{{ product_id }}',
+                    rating: selectedRating,
+                    comment: comment
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('average-rating').textContent = `Average Rating: ${data.average_rating} ⭐`;
+
+                    const newComment = `<li class="comment-item"><p>⭐ ${selectedRating} - ${comment}</p></li>`;
+                    document.getElementById('comment-list').innerHTML += newComment;
+                    document.getElementById('comment-box').value = ''; 
+                    selectedRating = 0;
+                    document.querySelectorAll('.star-rating i').forEach(s => s.classList.replace('fa-solid', 'fa-regular')); // Reset stars
+                }
+
+                // Show Toast
+                var toastElement = new bootstrap.Toast(document.getElementById('commentToast'));
+                toastElement.show();
+            })
+            .catch(err => console.error('Error:', err)); // No alert, just log error
+        });
+
         document.getElementById('add-to-cart').addEventListener('click', function () {
             const productId = this.getAttribute('data-product-id');
             const quantity = parseInt(document.getElementById('quantity').textContent);
@@ -154,19 +353,14 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ product_id: productId, quantity: quantity })
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        var cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
-                        cartModal.show();
-                    } else {
-                        alert(data.message || 'Failed to add product to cart!');
-                    }
-                })
-                .catch(err => {
-                    console.error('Error:', err);
-                    alert('An error occurred while adding to cart.');
-                });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    var cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+                    cartModal.show();
+                }
+            })
+            .catch(err => console.error('Error:', err)); // No alert, just log error
         });
 
         let quantity = 1;
@@ -177,6 +371,7 @@
             document.getElementById('quantity').textContent = quantity;
         }
     </script>
+
 </body>
 
 </html>
