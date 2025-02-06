@@ -46,7 +46,6 @@
                 {% endwith %}
                 <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
 
-                <!-- Link to Admin Signup Page -->
                 <p><a href="javascript:void(0);" onclick="checkAdminPassword()">Admin Sign Up</a></p>
 
             </div>
@@ -54,7 +53,6 @@
     </div>
 </div>
 
-<!-- Admin Password Popup -->
 <div id="adminPasswordPopup" style="display:none; position: fixed; top: 20%; left: 50%; transform: translateX(-50%); background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
     <h3>Enter Admin Password</h3>
     <input type="password" id="adminPassword" class="form-control" placeholder="Enter password">
@@ -78,22 +76,20 @@ function togglePassword(fieldId) {
 }
 
 function checkAdminPassword() {
-    // Show the password popup
+    
     document.getElementById('adminPasswordPopup').style.display = 'block';
 }
 
 function verifyAdminPassword() {
-    // Check if the entered password is correct
     var enteredPassword = document.getElementById('adminPassword').value;
     if (enteredPassword === "69420") {
-        window.location.href = "/admin_signup"; // Redirect to admin signup page
+        window.location.href = "/admin_signup"; 
     } else {
         alert("Incorrect password. Please try again.");
     }
 }
 
 function closePopup() {
-    // Close the password popup
     document.getElementById('adminPasswordPopup').style.display = 'none';
 }
 </script>

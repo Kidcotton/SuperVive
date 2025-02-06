@@ -59,7 +59,6 @@ def submit_review():
         
         product['reviews'].append({'rating': rating, 'comment': comment})
         
-        # Calculate average rating
         total_ratings = sum(r['rating'] for r in product['reviews'])
         product['average_rating'] = round(total_ratings / len(product['reviews']), 1)
 
