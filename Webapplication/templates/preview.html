@@ -96,6 +96,9 @@
         .modal-title{
             color: black;
         }
+       
+        
+        
     </style>
 </head>
 
@@ -108,6 +111,11 @@
             <div class="col-md-6">
                 <h2>{{ product.name }}</h2>
                 <p>{{ product.description }}</p>
+                <ul class="component-list">
+                    {% for component in product.components %}
+                        <li class="component-item">{{ component }}</li>
+                    {% endfor %}
+                </ul>
                 <p class="price">${{ product.price }}</p>
                 <div class="quantity-controls">
                     <button class="btn btn-secondary" onclick="updateQuantity(-1)">−</button>
@@ -149,7 +157,6 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Show the modal
                         var cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
                         cartModal.show();
                     } else {
