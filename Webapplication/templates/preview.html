@@ -29,7 +29,6 @@
         .star-rating i.selected, .star-rating i.fa-solid {
             color: #ffc107; /* Yellow color for selected stars */
         }
-        
 
         .navbar-brand {
             font-family: 'Arial', sans-serif;
@@ -191,7 +190,7 @@
             </div>
         </div>
 
-        <div class="reviews-section mt-5">
+        <div class="comments-section mt-4">
             <h3>Rate This Product</h3>
             <div class="star-rating" id="rating-stars">
                 {% for i in range(1, 6) %}
@@ -200,24 +199,21 @@
             </div>
             <p id="average-rating">Average Rating: {{ product.average_rating }} ⭐</p>
 
-            <div class="comments-section mt-4">
-                <h3>Comments</h3>
-                <textarea id="comment-box" class="comment-box" placeholder="Write a comment..."></textarea>
-                <button id="submit-comment" class="btn btn-primary mt-3">Submit Review</button>
-                
-                <ul class="comment-list mt-3" id="comment-list">
-                    {% for review in product.reviews %}
-                    <li class="comment-item" data-index="{{ loop.index0 }}">
-                        <p>⭐ {{ review.rating }} - {{ review.comment }}</p>
-                        {% if session.get('admin_logged_in') %}  <!-- Only show delete button for admins -->
-                        <button class="btn btn-danger btn-sm delete-review" data-index="{{ loop.index0 }}" data-product-id="{{ product_id }}">
-                            Delete
-                        </button>
-                        {% endif %}
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
+            <textarea id="comment-box" class="comment-box" placeholder="Write a comment..."></textarea>
+            <button id="submit-comment" class="btn btn-primary mt-3">Submit Review</button>
+            
+            <ul class="comment-list mt-3" id="comment-list">
+                {% for review in product.reviews %}
+                <li class="comment-item" data-index="{{ loop.index0 }}">
+                    <p>⭐ {{ review.rating }} - {{ review.comment }}</p>
+                    {% if session.get('admin_logged_in') %}  <!-- Only show delete button for admins -->
+                    <button class="btn btn-danger btn-sm delete-review" data-index="{{ loop.index0 }}" data-product-id="{{ product_id }}">
+                        Delete
+                    </button>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 
@@ -278,37 +274,35 @@
         });
         let selectedRating = 0;
 
-document.querySelectorAll('.star-rating i').forEach(star => {
-    star.addEventListener('click', function () {
-        const currentValue = this.getAttribute('data-value');
-        
-        // If the star clicked is already selected, unselect it
-        if (selectedRating === currentValue) {
-            // Reset selected stars
-            document.querySelectorAll('.star-rating i').forEach(s => {
-                s.classList.remove('fa-solid');
-                s.classList.add('fa-regular'); // Uncheck all stars
-            });
-            selectedRating = 0;  // Reset selected rating
-        } else {
-            // Update the selected rating
-            selectedRating = currentValue;
-
-            // Set all stars before the selected one to solid (yellow)
-            document.querySelectorAll('.star-rating i').forEach(s => {
-                if (parseInt(s.getAttribute('data-value')) <= selectedRating) {
-                    s.classList.remove('fa-regular');
-                    s.classList.add('fa-solid'); // Make stars yellow
+        document.querySelectorAll('.star-rating i').forEach(star => {
+            star.addEventListener('click', function () {
+                const currentValue = this.getAttribute('data-value');
+                
+                // If the star clicked is already selected, unselect it
+                if (selectedRating === currentValue) {
+                    // Reset selected stars
+                    document.querySelectorAll('.star-rating i').forEach(s => {
+                        s.classList.remove('fa-solid');
+                        s.classList.add('fa-regular'); // Uncheck all stars
+                    });
+                    selectedRating = 0;  // Reset selected rating
                 } else {
-                    s.classList.remove('fa-solid');
-                    s.classList.add('fa-regular'); // Uncheck remaining stars
+                    // Update the selected rating
+                    selectedRating = currentValue;
+
+                    // Set all stars before the selected one to solid (yellow)
+                    document.querySelectorAll('.star-rating i').forEach(s => {
+                        if (parseInt(s.getAttribute('data-value')) <= selectedRating) {
+                            s.classList.remove('fa-regular');
+                            s.classList.add('fa-solid'); // Make stars yellow
+                        } else {
+                            s.classList.remove('fa-solid');
+                            s.classList.add('fa-regular'); // Uncheck remaining stars
+                        }
+                    });
                 }
             });
-        }
-    });
-});
-
-
+        });
 
         document.getElementById('submit-comment').addEventListener('click', function () {
             const comment = document.getElementById('comment-box').value;

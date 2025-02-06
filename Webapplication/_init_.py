@@ -25,7 +25,7 @@ def prebuilds():
 @app.route('/update_cart_quantity', methods=['POST'])
 def update_cart_quantity():
     item_id = request.json.get('item_id')
-    action = request.json.get('action')  
+    action = request.json.get('action')
 
     cart = session.get('cart', [])
 
@@ -35,7 +35,7 @@ def update_cart_quantity():
                 item['quantity'] += 1
             elif action == 'decrease' and item['quantity'] > 1:
                 item['quantity'] -= 1
-            break 
+            break
 
     session['cart'] = cart
     return jsonify(success=True, cart=cart)
@@ -260,7 +260,7 @@ def populate():
         db['PB001'] = {
             'name': 'The Average',
             'price': 715.0,
-            'stock': 10,  
+            'stock': 10,
             'image': 'images/average_pc.jpg',
             'description': 'Ryzen 5 5600 + GeForce RTX 3050',
             'components': [
@@ -691,6 +691,7 @@ def delete_review():
 
         db[product_id] = product
         return jsonify(success=True, average_rating=product['average_rating'], reviews=product['reviews'])
+
     
 @app.route('/findus')
 def findus():
@@ -698,14 +699,14 @@ def findus():
 
 @app.route('/admin_logout')
 def admin_logout():
-    session.clear()  
-    return jsonify(success=True)  
+    session.clear()
+    return jsonify(success=True)
 
 
 @app.route('/logout')
 def logout():
-    session.clear()  
-    return jsonify(success=True)  
+    session.clear()
+    return jsonify(success=True)
 
 
 @app.context_processor
