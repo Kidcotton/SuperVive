@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block title %}Product Preview{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Preview - Gaming Deals</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+    <style>
+        .navbar {
+            background-image: url('static/images/real.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .navbar-brand {
+            font-family: 'Arial', sans-serif;
+            font-size: 24px;
+            color: white !important;
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: white;
+            font-family: 'Arial', sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ccc;
+        }
+
+        .container {
+            padding-top: 100px;
+            color: #fff;
+        }
+
+        .product-details {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+        }
+
+        .product-details img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .quantity-controls button {
+            margin: 0 10px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            padding-top: 100px;
+        }
+
+        /* Modal styles */
+        .modal-body {
+            text-align: center;
+            color: black;
+        }
+        .modal-title{
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container product-details">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="static/{{ product.image }}" alt="{{ product.name }}">
+            </div>
+            <div class="col-md-6">
+                <h2>{{ product.name }}</h2>
+                <p>{{ product.description }}</p>
+                <p class="price">${{ product.price }}</p>
+                <div class="quantity-controls">
+                    <button class="btn btn-secondary" onclick="updateQuantity(-1)">−</button>
+                    <span id="quantity">1</span>
+                    <button class="btn btn-secondary" onclick="updateQuantity(1)">+</button>
+                </div>
+                <button id="add-to-cart" class="btn btn-primary mt-3" data-product-id="{{ product_id }}">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Product Added</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>The product has been added to your cart. Do you want to go to your cart or continue shopping?</p>
+                    <a href="{{ url_for('home') }}" class="btn btn-secondary">Continue Shopping</a>
+                    <a href="{{ url_for('cart') }}" class="btn btn-primary">Go to Cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('add-to-cart').addEventListener('click', function () {
+            const productId = this.getAttribute('data-product-id');
+            const quantity = parseInt(document.getElementById('quantity').textContent);
+
+            fetch('/add_to_cart', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ product_id: productId, quantity: quantity })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show the modal
+                        var cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+                        cartModal.show();
+                    } else {
+                        alert(data.message || 'Failed to add product to cart!');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('An error occurred while adding to cart.');
+                });
+        });
+
+        let quantity = 1;
+
+        function updateQuantity(change) {
+            quantity += change;
+            if (quantity < 1) quantity = 1;
+            document.getElementById('quantity').textContent = quantity;
+        }
+    </script>
+</body>
+
+</html>
+{% endblock %}

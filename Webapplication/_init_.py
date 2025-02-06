@@ -38,26 +38,30 @@ def update_cart_quantity():
 
     session['cart'] = cart
     return jsonify(success=True, cart=cart)
-
+@app.route('/preview/<product_id>')
+def preview(product_id):
+    with shelve.open(DATABASE) as db:
+        if product_id in db:
+            product = db[product_id]
+            return render_template('preview.html', product=product, product_id=product_id)
+        else:
+            flash('Product not found!', 'error')
+            return redirect(url_for('index'))
+        
+        
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
-    product_id = request.form['product_id']
-    print(f"Received product_id: {product_id}")
+    data = request.get_json()
+    product_id = data.get('product_id')
+    quantity = data.get('quantity', 1)
 
     with shelve.open(DATABASE) as db:
-        print(f"Available products in database: {list(db.keys())}")
-
         if product_id in db:
             product = db[product_id]
             cart = session.get('cart', [])
-            cart = [
-                item if isinstance(item, dict) 
-                else {'id': str(item), 'quantity': 1}
-                for item in cart
-            ]
             found_item = next((i for i in cart if i['id'] == product_id), None)
             if found_item:
-                found_item['quantity'] += 1
+                found_item['quantity'] += quantity
             else:
                 image_path = product.get('image', '')
                 cart.append({
@@ -65,14 +69,12 @@ def add_to_cart():
                     'name': product['name'],
                     'price': product['price'],
                     'image': image_path,
-                    'quantity': 1
+                    'quantity': quantity
                 })
             session['cart'] = cart
             return jsonify(success=True)
         else:
             return jsonify(success=False, message=f'Product with ID {product_id} not found!')
-
-    return redirect(url_for('home'))
 
 @app.route('/remove_from_cart', methods=['POST'])
 def remove_from_cart():

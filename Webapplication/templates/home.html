@@ -12,6 +12,7 @@
     <title>Home - Gaming Deals</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <style>
+        
         body {
             background-color: #222;
             color: #fff;
@@ -117,86 +118,65 @@
 
                 <div class="card position-relative">
                     <div class="discount-badge">17% OFF</div>
-                    <img src="static/images/rtx-4070.jpg" alt="GeForce RTX 4070 Super">
+                    <img src="{{ url_for('static', filename='images/rtx-4070.jpg') }}" alt="GeForce RTX 4070 Super">
                     <div class="card-body">
                         <h3 class="card-title">GeForce RTX 4070 Super</h3>
                         <p class="stock-info">Only 500 stocks left!</p>
                         <p class="price">$499.90 <span class="old-price">$600</span></p>
-                        <form class="add-to-cart-form" action="/add_to_cart" method="POST">
-                            <input type="hidden" name="product_id" value="CP005">
-                            <button type="submit" class="btn btn-primary">Add to Cart</button>
-                        </form>
+                        <a href="/preview/CP005" class="btn btn-primary">View Product</a>
+                    </div>
+                </div>
+                <div class="card position-relative">
+                    <div class="discount-badge">21% OFF</div>
+                    <img src="{{ url_for('static', filename='images/gskill-ram.jpg') }}" alt="GeForce RTX 4070 Super">
+                    <div class="card-body">
+                        <h3 class="card-title">G.Skill Trident Z5 Neo RGB</h3>
+                        <p class="stock-info">Only 700 stocks left!</p>
+                        <p class="price">$189 <span class="old-price">$230</span></p>
+                        <a href="/preview/CP006" class="btn btn-primary">View Product</a>
                     </div>
                 </div>
 
                 <div class="card position-relative">
                     <div class="discount-badge">21% OFF</div>
-                    <img src="static/images/gskill-ram.jpg" alt="G.Skill Trident Z5 Neo RGB">
-                    <div class="card-body">
-                        <h3 class="card-title">G.Skill Trident Z5 Neo RGB</h3>
-                        <p class="stock-info">Only 700 stocks left!</p>
-                        <p class="price">$189 <span class="old-price">$239</span></p>
-                        <form class="add-to-cart-form" action="/add_to_cart" method="POST">
-                            <input type="hidden" name="product_id" value="CP006">
-                            <button type="submit" class="btn btn-primary">Add to Cart</button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card position-relative">
-                    <div class="discount-badge">15% OFF</div>
-                    <img src="static/images/amd-ryzen.jpg" alt="AMD Ryzen 7 9700X">
+                    <img src="{{ url_for('static', filename='images/amd-ryzen.jpg') }}" alt="AMD Ryzen 7 9700X">
                     <div class="card-body">
                         <h3 class="card-title">AMD Ryzen 7 9700X</h3>
                         <p class="stock-info">Only 800 stocks left!</p>
                         <p class="price">$299 <span class="old-price">$349</span></p>
-                        <form class="add-to-cart-form" action="/add_to_cart" method="POST">
-                            <input type="hidden" name="product_id" value="CP007">
-                            <button type="submit" class="btn btn-primary">Add to Cart</button>
-                        </form>
+                        <a href="/preview/CP007" class="btn btn-primary">View Product</a>
                     </div>
                 </div>
-
                 <div class="card position-relative">
-                    <div class="discount-badge">15% OFF</div>
-                    <img src="static/images/gpu_nvidia_gtx_1660.jpg" alt="Nvidia GTX 1660 GPU">
+                    <div class="discount-badge">21% OFF</div>
+                    <img src="{{ url_for('static', filename='images/gpu_nvidia_gtx_1660.jpg') }}" alt="Nvidia GTX 1660 GPU">
                     <div class="card-body">
                         <h3 class="card-title">Nvidia GTX 1660 GPU</h3>
                         <p class="stock-info">Only 800 stocks left!</p>
                         <p class="price">$400 <span class="old-price">$460</span></p>
-                        <form class="add-to-cart-form" action="/add_to_cart" method="POST">
-                            <input type="hidden" name="product_id" value="CP002">
-                            <button type="submit" class="btn btn-primary">Add to Cart</button>
-                        </form>
+                        <a href="/preview/CP002" class="btn btn-primary">View Product</a>
                     </div>
                 </div>
                 <div class="card position-relative">
-                    <div class="discount-badge">17% OFF</div>
-                    <img src="static/images/cpu_intel_i5.jpg" alt="CPU Intel i5">
+                    <div class="discount-badge">21% OFF</div>
+                    <img src="{{ url_for('static', filename='images/cpu_intel_i5.jpg') }}" alt="CPU Intel i5">
                     <div class="card-body">
                         <h3 class="card-title">CPU Intel i5</h3>
                         <p class="stock-info">Only 300 stocks left!</p>
                         <p class="price">$200 <span class="old-price">$234</span></p>
-                        <form class="add-to-cart-form" action="/add_to_cart" method="POST">
-                            <input type="hidden" name="product_id" value="CP001">
-                            <button type="submit" class="btn btn-primary">Add to Cart</button>
-                        </form>
+                        <a href="/preview/CP001" class="btn btn-primary">View Product</a>
                     </div>
                 </div>
                 <div class="card position-relative">
-                    <div class="discount-badge">14% OFF</div>
-                    <img src="static/images/ram_16gb_ddr4.jpg" alt="RAM 16GB DDR4">
+                    <div class="discount-badge">21% OFF</div>
+                    <img src="{{ url_for('static', filename='images/ram_16gb_ddr4.jpg') }}" alt="RAM 16GB DDR4">
                     <div class="card-body">
                         <h3 class="card-title">RAM 16GB DDR4</h3>
                         <p class="stock-info">Only 100 stocks left!</p>
                         <p class="price">$68.80 <span class="old-price">$80</span></p>
-                        <form class="add-to-cart-form" action="/add_to_cart" method="POST">
-                            <input type="hidden" name="product_id" value="CP003">
-                            <button type="submit" class="btn btn-primary">Add to Cart</button>
-                        </form>
+                        <a href="/preview/CP003" class="btn btn-primary">View Product</a>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

@@ -75,31 +75,21 @@
             color: #999;
             margin-left: 10px;
         }
-        .add-to-cart-btn {
+        .view-product-btn {
             background-color: red;
             color: white;
             font-size: 18px;
             font-weight: bold;
-            width: 100%;
+            width: 100%; /* Make the button fill the full width */
             padding: 10px;
             border-radius: 5px;
             border: none;
             cursor: pointer;
             transition: 0.3s;
+            margin-top: 10px; /* Optional: add space above the button */
         }
-        .add-to-cart-btn:hover {
+        .view-product-btn:hover {
             background-color: darkred;
-        }
-        .modal-title {
-            color: black;
-        }
-        .modal-body {
-            color: black;
-        }
-        .pc-card img {
-            width: 60%; 
-            display: block;
-            margin: 0 auto; 
         }
     </style>
 </head>
@@ -126,13 +116,8 @@
                     <li>⚡ 550W Gigabyte 80+ Silver (ATX3.0)</li>
                 </ul>
                 <p class="pc-price">SGD $715 <span class="old-price">$822</span></p>
-                <form class="add-to-cart-form" action="/add_to_cart" method="POST">
-                    <input type="hidden" name="product_id" value="PB001">
-                    <input type="hidden" name="name" value="The Average">
-                    <input type="hidden" name="price" value="715">
-                    <input type="hidden" name="image" value="images/average_pc.jpg">
-                    <button type="submit" class="add-to-cart-btn">ADD TO CART</button>
-                </form>
+                <!-- Change Add to Cart button to View Product with full width -->
+                <a href="/preview/PB001" class="view-product-btn">VIEW PRODUCT</a>
             </div>
 
             <div class="pc-card">
@@ -150,58 +135,11 @@
                     <li>⚡ 850W Thermaltight 80+ Gold</li>
                 </ul>
                 <p class="pc-price">SGD $2,015 <span class="old-price">$2,294</span></p>
-                <form class="add-to-cart-form" action="/add_to_cart" method="POST">
-                    <input type="hidden" name="product_id" value="PB002">
-                    <input type="hidden" name="name" value="The Monster">
-                    <input type="hidden" name="price" value="2015">
-                    <input type="hidden" name="image" value="images/monster_pc.jpg">
-                    <button type="submit" class="add-to-cart-btn">ADD TO CART</button>
-                </form>
+                <!-- Change Add to Cart button to View Product with full width -->
+                <a href="/preview/PB002" class="view-product-btn">VIEW PRODUCT</a>
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cartModalLabel">Item Added to Cart</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    The item has been added to your shopping cart.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a href="/cart" class="btn btn-primary">Go to Cart</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        document.querySelectorAll('.add-to-cart-form').forEach(form => {
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-
-                const formData = new FormData(form);
-
-                fetch('/add_to_cart', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        var myModal = new bootstrap.Modal(document.getElementById('cartModal'));
-                        myModal.show();
-                    } else {
-                        alert(data.message);
-                    }
-                });
-            });
-        });
-    </script>
 
 </body>
 </html>
