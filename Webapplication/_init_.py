@@ -503,13 +503,38 @@ def reset_password():
 @app.route('/contactUs')
 def contact_us():
     return render_template('contactUs.html')
-@app.route('/customerForum')
-def customerForum():
-    return render_template('customerForum.html')
 
-@app.route('/adminForum')
+comments = []
+@app.route("/customerForum", methods=["GET", "POST"])
+def customerForum():
+    if request.method == "POST":
+        name = request.form.get("name")
+        comment = request.form.get("comment")
+        if name and comment:
+            comments.append({"name": name, "comment": comment})
+        return redirect(url_for("customerForum"))
+
+    return render_template("customerForum.html", comments=comments)
+
+
+@app.route("/adminForum", methods=["GET", "POST"])
 def adminForum():
-    return render_template('adminForum.html')
+    global comments
+    if request.method == "POST":
+        comment_index = request.form.get("comment_index")
+        if comment_index is not None:
+            try:
+                comment_index = int(comment_index)
+                if 0 <= comment_index < len(comments):
+                    del comments[comment_index]
+                    flash("Comment deleted successfully", "success")
+            except ValueError:
+                flash("Invalid comment index", "error")
+        return redirect(url_for("adminForum"))
+
+    return render_template("adminForum.html", comments=comments)
+
+
 
 
 @app.route('/signup_cus', methods=['GET', 'POST'])
@@ -534,6 +559,22 @@ def signup_cus():
                 flash('Registration successful! You can now log in.', 'success')
                 return redirect(url_for('login'))
     return render_template('signup_cus.html', form=form)
+
+@app.route("/admin_delete_comment", methods=["POST"])
+def admin_delete_comment():
+    global comments  # Assuming `comments` is a global list or fetched from a database
+    comment_index = request.form.get("comment_index")  # Get the comment index from the form
+    if comment_index is not None:
+        try:
+            comment_index = int(comment_index)  # Convert to integer
+            if 0 <= comment_index < len(comments):  # Check if the index is valid
+                del comments[comment_index]  # Delete the comment
+                flash("Comment deleted successfully", "success")
+            else:
+                flash("Invalid comment index", "error")
+        except ValueError:
+            flash("Invalid comment index", "error")
+    return redirect(url_for("adminForum"))
 
 @app.route('/login_cus', methods=['GET', 'POST'])
 def login():
