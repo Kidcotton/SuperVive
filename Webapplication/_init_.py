@@ -39,6 +39,7 @@ def update_cart_quantity():
 
     session['cart'] = cart
     return jsonify(success=True, cart=cart)
+
 @app.route('/submit_review', methods=['POST'])
 def submit_review():
     data = request.get_json()
@@ -49,6 +50,8 @@ def submit_review():
     if not product_id or rating < 1 or rating > 5:
         return jsonify(success=False, message="Invalid input")
 
+    username = session.get('username')  # Fetch username instead of email
+
     with shelve.open(DATABASE, writeback=True) as db:
         if product_id not in db:
             return jsonify(success=False, message="Product not found")
@@ -56,16 +59,20 @@ def submit_review():
         product = db[product_id]
         if 'reviews' not in product:
             product['reviews'] = []
+
+        # Store username instead of email
+        review_data = {'rating': rating, 'comment': comment}
+        if username:
+            review_data['username'] = username
         
-        product['reviews'].append({'rating': rating, 'comment': comment})
-        
+        product['reviews'].append(review_data)
+
         total_ratings = sum(r['rating'] for r in product['reviews'])
         product['average_rating'] = round(total_ratings / len(product['reviews']), 1)
 
         db[product_id] = product
 
     return jsonify(success=True, average_rating=product['average_rating'], reviews=product['reviews'])
-
 
 
 @app.route('/preview/<product_id>')
@@ -548,23 +555,28 @@ def adminForum():
 def signup_cus():
     form = SignUpForm(request.form)
     if request.method == 'POST':
+        username = form.username.data
         email = form.email.data
         password = form.password.data
         confirm_password = form.confirm_password.data
+
         if not form.validate():
             flash("Form validation failed. Please check your input.", "error")
             return render_template('signup_cus.html', form=form)
+
         if password != confirm_password:
             flash("Passwords do not match. Please try again.", "error")
             return render_template('signup_cus.html', form=form)
+
         with shelve.open('users_db') as db:
             if email in db:
                 flash('Email already exists. Please choose another one.', 'error')
                 return render_template('signup_cus.html', form=form)
             else:
-                db[email] = {'Email': email, 'password': password}
+                db[email] = {'username': username, 'email': email, 'password': password}
                 flash('Registration successful! You can now log in.', 'success')
                 return redirect(url_for('login'))
+
     return render_template('signup_cus.html', form=form)
 
 @app.route('/login_cus', methods=['GET', 'POST'])
@@ -577,6 +589,7 @@ def login():
             if email in db:
                 if db[email]['password'] == password:
                     session['email'] = email
+                    session['username'] = db[email]['username']  # Store the username in session
                     return redirect(url_for('home'))
                 else:
                     flash('Invalid password. Please try again.', 'error')
@@ -589,11 +602,44 @@ def admin():
     if 'admin_logged_in' not in session:
         flash('Unauthorized access. Please log in as an admin.', 'error')
         return redirect(url_for('admin_login'))
+
     users = []
     with shelve.open('users_db') as db:
         for email, details in db.items():
-            users.append({'email': email, 'password': details['password']})
+            users.append({
+                'username': details.get('username', 'N/A'),  # Retrieve username, default to 'N/A' if missing
+                'email': email,
+                'password': details['password']
+            })
+    
     return render_template('admin.html', users=users)
+
+@app.route('/update_username', methods=['POST'])
+def update_username():
+    if 'admin_logged_in' not in session:
+        return jsonify(success=False, message="Unauthorized access.")
+
+    data = request.get_json()
+    old_email = data.get('old_email')
+    new_email = data.get('email')
+    new_password = data.get('password')
+    new_username = data.get('username')
+
+    with shelve.open('users_db', writeback=True) as db:
+        if old_email not in db:
+            return jsonify(success=False, message="User not found.")
+        
+        # Update user details
+        db[new_email] = {'username': new_username, 'email': new_email, 'password': new_password}
+
+        # Remove the old email entry if changed
+        if new_email != old_email:
+            del db[old_email]
+        
+        db.sync()
+    
+    return jsonify(success=True)
+
 
 @app.route('/delete_user/<email>', methods=['POST'])
 def delete_user(email):
@@ -711,6 +757,10 @@ def logout():
 @app.context_processor
 def inject_user():
     return dict(user_email=session.get('email'))
+
+@app.context_processor
+def inject_user():
+    return dict(username=session.get('username'))
 
 
 

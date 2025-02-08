@@ -1,6 +1,13 @@
 from wtforms import Form, StringField, PasswordField, validators
 
 class SignUpForm(Form):
+    username = StringField(
+        'Username:',
+        validators=[
+            validators.DataRequired(message="Username is required."),
+            validators.Length(min=3, max=20, message="Username must be between 3 and 20 characters."),
+        ]
+    )
     email = StringField(
         'Email Address:',
         validators=[

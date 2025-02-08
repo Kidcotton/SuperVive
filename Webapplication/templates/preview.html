@@ -205,8 +205,13 @@
             <ul class="comment-list mt-3" id="comment-list">
                 {% for review in product.reviews %}
                 <li class="comment-item" data-index="{{ loop.index0 }}">
-                    <p>⭐ {{ review.rating }} - {{ review.comment }}</p>
-                    {% if session.get('admin_logged_in') %}  <!-- Only show delete button for admins -->
+                    <p>
+                        ⭐ {{ review.rating }} - {{ review.comment }}
+                        {% if review.username %} <!-- Display username instead of email -->
+                            <br><small>Posted by: {{ review.username }}</small>
+                        {% endif %}
+                    </p>
+                    {% if session.get('admin_logged_in') %}
                     <button class="btn btn-danger btn-sm delete-review" data-index="{{ loop.index0 }}" data-product-id="{{ product_id }}">
                         Delete
                     </button>
@@ -214,6 +219,7 @@
                 </li>
                 {% endfor %}
             </ul>
+            
         </div>
     </div>
 
@@ -307,9 +313,9 @@
         document.getElementById('submit-comment').addEventListener('click', function () {
             const comment = document.getElementById('comment-box').value;
             if (!selectedRating || comment.trim() === '') {
-                return; // Do nothing if input is invalid
+                return;
             }
-
+        
             fetch('/submit_review', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -323,20 +329,31 @@
             .then(data => {
                 if (data.success) {
                     document.getElementById('average-rating').textContent = `Average Rating: ${data.average_rating} ⭐`;
-
-                    const newComment = `<li class="comment-item"><p>⭐ ${selectedRating} - ${comment}</p></li>`;
-                    document.getElementById('comment-list').innerHTML += newComment;
-                    document.getElementById('comment-box').value = ''; 
+        
+                    // Create the new comment element
+                    const newComment = document.createElement('li');
+                    newComment.classList.add('comment-item');
+                    newComment.innerHTML = `
+                        <p>
+                            ⭐ ${selectedRating} - ${comment}
+                            <br><small>Posted by: {{ session.get('username') }}</small>
+                        </p>
+                    `;
+        
+                    document.getElementById('comment-list').appendChild(newComment);
+        
+                    document.getElementById('comment-box').value = '';
                     selectedRating = 0;
-                    document.querySelectorAll('.star-rating i').forEach(s => s.classList.replace('fa-solid', 'fa-regular')); // Reset stars
+                    document.querySelectorAll('.star-rating i').forEach(s => s.classList.replace('fa-solid', 'fa-regular'));
                 }
-
-                // Show Toast
+        
                 var toastElement = new bootstrap.Toast(document.getElementById('commentToast'));
                 toastElement.show();
             })
-            .catch(err => console.error('Error:', err)); // No alert, just log error
+            .catch(err => console.error('Error:', err));
         });
+        
+        
 
         document.getElementById('add-to-cart').addEventListener('click', function () {
             const productId = this.getAttribute('data-product-id');
