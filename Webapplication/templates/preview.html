@@ -13,12 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">  <!-- FA Icons -->
     <style>
-        .navbar {
-            background-image: url('static/images/real.jpg');
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-        }
+        
 
         .star-rating i {
             font-size: 1.5rem;
@@ -30,23 +25,7 @@
             color: #ffc107; /* Yellow color for selected stars */
         }
 
-        .navbar-brand {
-            font-family: 'Arial', sans-serif;
-            font-size: 24px;
-            color: white !important;
-            font-weight: bold;
-        }
-
-        .navbar-nav .nav-link {
-            color: white;
-            font-family: 'Arial', sans-serif;
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: #ccc;
-        }
+        
 
         .container {
             padding-top: 100px;
@@ -100,7 +79,7 @@
             padding-top: 100px;
         }
 
-        /* Modal styles */
+        
         .modal-body {
             text-align: center;
             color: black;
@@ -194,7 +173,7 @@
             <h3>Rate This Product</h3>
             <div class="star-rating" id="rating-stars">
                 {% for i in range(1, 6) %}
-                <i class="fa-regular fa-star" data-value="{{ i }}"></i> <!-- Unclicked star (empty) -->
+                <i class="fa-regular fa-star" data-value="{{ i }}"></i> 
                 {% endfor %}
             </div>
             <p id="average-rating">Average Rating: {{ product.average_rating }} ⭐</p>
@@ -207,7 +186,7 @@
                 <li class="comment-item" data-index="{{ loop.index0 }}">
                     <p>
                         ⭐ {{ review.rating }} - {{ review.comment }}
-                        {% if review.username %} <!-- Display username instead of email -->
+                        {% if review.username %} 
                             <br><small>Posted by: {{ review.username }}</small>
                         {% endif %}
                     </p>
@@ -223,7 +202,7 @@
         </div>
     </div>
 
-    <!-- Modal for cart -->
+    
     <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -240,7 +219,7 @@
         </div>
     </div>
 
-    <!-- Bootstrap Toast Notification -->
+    
     <div class="toast-container position-fixed top-0 end-0 p-3">
         <div id="commentToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
@@ -269,7 +248,7 @@
                     if (data.success) {
                         document.getElementById('average-rating').textContent = `Average Rating: ${data.average_rating} ⭐`;
     
-                        // Remove the deleted comment from UI
+                        
                         this.parentElement.remove();
                     } else {
                         alert(data.message);
@@ -284,26 +263,26 @@
             star.addEventListener('click', function () {
                 const currentValue = this.getAttribute('data-value');
                 
-                // If the star clicked is already selected, unselect it
+                
                 if (selectedRating === currentValue) {
-                    // Reset selected stars
+                    
                     document.querySelectorAll('.star-rating i').forEach(s => {
                         s.classList.remove('fa-solid');
-                        s.classList.add('fa-regular'); // Uncheck all stars
+                        s.classList.add('fa-regular'); 
                     });
-                    selectedRating = 0;  // Reset selected rating
+                    selectedRating = 0;  
                 } else {
-                    // Update the selected rating
+                    
                     selectedRating = currentValue;
 
-                    // Set all stars before the selected one to solid (yellow)
+                    
                     document.querySelectorAll('.star-rating i').forEach(s => {
                         if (parseInt(s.getAttribute('data-value')) <= selectedRating) {
                             s.classList.remove('fa-regular');
-                            s.classList.add('fa-solid'); // Make stars yellow
+                            s.classList.add('fa-solid'); 
                         } else {
                             s.classList.remove('fa-solid');
-                            s.classList.add('fa-regular'); // Uncheck remaining stars
+                            s.classList.add('fa-regular'); 
                         }
                     });
                 }
@@ -330,7 +309,7 @@
                 if (data.success) {
                     document.getElementById('average-rating').textContent = `Average Rating: ${data.average_rating} ⭐`;
         
-                    // Create the new comment element
+                    
                     const newComment = document.createElement('li');
                     newComment.classList.add('comment-item');
                     newComment.innerHTML = `
@@ -347,8 +326,9 @@
                     document.querySelectorAll('.star-rating i').forEach(s => s.classList.replace('fa-solid', 'fa-regular'));
                 }
         
-                var toastElement = new bootstrap.Toast(document.getElementById('commentToast'));
-                toastElement.show();
+                var toastElement = document.getElementById('commentToast');
+        var toast = new bootstrap.Toast(toastElement, { delay: 3000 }); 
+        toast.show();
             })
             .catch(err => console.error('Error:', err));
         });

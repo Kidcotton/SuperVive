@@ -6,97 +6,179 @@
   <title>NavBar</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
+    /* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    .navbar-brand {
-      font-family: 'Arial', sans-serif;
-      font-size: 24px;
-      color: white !important;
-      font-weight: bold;
-    }
+/* Navbar base styles */
+.navbar {
+  background-color: #000 !important;
+  padding: 0.75rem 2rem !important;
+  height: 72px;
+}
 
-    .navbar-nav .nav-link {
-      color: white !important;
-      font-family: 'Arial', sans-serif;
-      font-size: 16px;
-      font-weight: bold;
-      padding-right: 20px;
-      padding-left: 20px;
-      position: relative; /* Needed for the underline effect */
-    }
+.container-fluid {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    .navbar-nav .nav-link:hover {
-      color: #ccc;
-      background-color: rgba(255, 255, 255, 0.2); /* Light background on hover */
-      border-radius: 5px; /* Optional: adds rounded corners on hover */
-    }
+/* Logo section */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 1.5rem;
+  color: white !important;
+  font-weight: 500;
+  text-decoration: none;
+  margin-right: 3rem;
+}
 
-    .navbar-nav .nav-link.active {
-      color: white !important;
-      text-decoration: underline; /* Adds the underline on active */
-      text-underline-position: under; /* Ensures the underline appears under the text */
-    }
+.logo-img {
+  height: 40px;
+  width: auto;
+}
 
-    .navbar-icons .nav-link img {
-      width: 40px;
-      height: 40px;
-      margin-left: 15px;
-    }
+/* Navigation links */
+.navbar-collapse {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+}
 
-    .navbar-nav .nav-item img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-    }
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  margin: 0 auto;
+}
 
-    .container-fluid {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-    }
+.nav-link {
+  color: white !important;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0.5rem 0;
+  transition: all 0.2s ease;
+  position: relative;
+}
 
-    .navbar-nav {
-      display: flex;
-      flex-grow: 1;
-      justify-content: space-around;
-      align-items: center;
-    }
+.nav-link:hover {
+  opacity: 0.8;
+  background-color: transparent !important;
+}
 
-    .navbar-icons {
-      display: flex;
-      align-items: center;
-    }
+.nav-link.active {
+  position: relative;
+}
 
-    .nav-item .user-email {
-      position: relative;
-      top: -8px;
-      margin-left: 5px;
-    }
+.nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: white;
+}
 
-    .dropdown-menu {
-      left: auto;
-      right: 0;
-    }
+/* Icons section */
+.navbar-nav .nav-item:last-child {
+  margin-left: auto;
+}
 
-    .logo-img {
-      height: 40px;
-      width: auto;
-    }
+.bi {
+  font-size: 1.5rem !important;
+}
 
-    .admin-link {
-      color: red !important;
-      font-weight: bold;
-    }
+/* Cart and profile icons */
+.nav-item:nth-last-child(-n + 2) {
+  margin-left: 1rem;
+}
 
-    .admin-link:hover {
-      color: darkred !important;
-    }
+/* Dropdown menu */
+.dropdown-menu {
+  background-color: #fff;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin-top: 0.5rem;
+}
 
-    .navbar .dropdown-toggle:focus,
-    .navbar .dropdown-toggle:hover,
-    .navbar .dropdown-toggle[aria-expanded="true"] {
-      color: white !important;
-    }
+.dropdown-item {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #1a1a1a;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-divider {
+  margin: 0.5rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Admin link */
+.admin-link {
+  color: #dc2626 !important;
+}
+
+.admin-link:hover {
+  color: #b91c1c !important;
+}
+
+/* User email */
+.user-email {
+  font-size: 17px;
+  margin-left: 0.5rem;
+  color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #000;
+    padding: 1rem;
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav-link {
+    padding: 0.5rem 1rem;
+  }
+
+  .nav-item:nth-last-child(-n + 2) {
+    margin-left: 0;
+  }
+}
+
+/* Bootstrap icon overrides */
+.navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+
   </style>
 </head>
 
@@ -129,12 +211,6 @@
               <a class="nav-link admin-link" href="/admin">Admin Dashboard</a>
             </li>
             {% endif %}
-
-            <!-- Swapping Cart and Person Icon Section -->
-            <li class="nav-item">
-              <a class="nav-link {% if request.path == '/cart' %}active{% endif %}" href="/cart"><i
-                  class="bi bi-cart bi fs-2"></i></a>
-            </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -156,6 +232,11 @@
                 {% endif %}
               </div>
             </li>
+            <li class="nav-item-1">
+              <a class="nav-link {% if request.path == '/cart' %}active{% endif %}" href="/cart"><i
+                  class="bi bi-cart bi fs-2"></i></a>
+            </li>
+            
           </ul>
         </div>
     </div>
