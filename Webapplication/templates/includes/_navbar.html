@@ -6,14 +6,14 @@
   <title>NavBar</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
-    /* Reset default styles */
+    
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Navbar base styles */
+
 .navbar {
   background-color: #000 !important;
   padding: 0.75rem 2rem !important;
@@ -29,7 +29,7 @@
   justify-content: space-between;
 }
 
-/* Logo section */
+
 .navbar-brand {
   display: flex;
   align-items: center;
@@ -47,7 +47,7 @@
   width: auto;
 }
 
-/* Navigation links */
+
 .navbar-collapse {
   display: flex;
   justify-content: center;
@@ -90,7 +90,7 @@
   background-color: white;
 }
 
-/* Icons section */
+
 .navbar-nav .nav-item:last-child {
   margin-left: auto;
 }
@@ -99,12 +99,12 @@
   font-size: 1.5rem !important;
 }
 
-/* Cart and profile icons */
+
 .nav-item:nth-last-child(-n + 2) {
   margin-left: 1rem;
 }
 
-/* Dropdown menu */
+
 .dropdown-menu {
   background-color: #fff;
   border-radius: 0.5rem;
@@ -128,7 +128,7 @@
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-/* Admin link */
+
 .admin-link {
   color: #dc2626 !important;
 }
@@ -137,14 +137,14 @@
   color: #b91c1c !important;
 }
 
-/* User email */
+
 .user-email {
   font-size: 17px;
   margin-left: 0.5rem;
   color: white;
 }
 
-/* Responsive adjustments */
+
 @media (max-width: 991.98px) {
   .navbar-collapse {
     position: absolute;
@@ -169,7 +169,7 @@
   }
 }
 
-/* Bootstrap icon overrides */
+
 .navbar-toggler {
   border-color: rgba(255, 255, 255, 0.5) !important;
 }
@@ -182,7 +182,7 @@
   </style>
 </head>
 
-<body>
+<nav>
   <nav class="navbar navbar-expand-lg bg-dark fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand d-flex align-items-center fs-3" href="/">
@@ -245,7 +245,7 @@
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+</nav>
 <script>
   function confirmLogout() {
     if (confirm("Are you sure you want to log out?")) {
