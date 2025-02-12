@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prebuilt PCs</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #222;
@@ -26,10 +26,11 @@
             color: #FFD700;
             text-shadow: 2px 2px 5px black;
             border-radius: 10px;
-            background-image: url('static/images/purplebg.jpg');
+            background-image: url('{{ url_for("static", filename="images/purplebg.jpg") }}');
         }
         .pc-container {
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
             gap: 30px;
             margin-top: 20px;
@@ -88,6 +89,8 @@
             transition: 0.3s;
             margin-top: 10px;
             text-decoration: none;
+            text-align: center;
+            display: block;
         }
         .view-product-btn:hover {
             background-color: darkred;
@@ -102,43 +105,27 @@
         </div>
 
         <div class="pc-container">
+            {% for pc in prebuilts %}
             <div class="pc-card">
-                <span class="badge bg-danger">12.12 STAR DEAL!</span>
-                <h3 class="pc-title">The Average</h3>
-                <p class="pc-subtitle">Ryzen 5 5600 + GeForce RTX 3050</p>
-                <img src="/static/images/average_pc.jpg" alt="The Average PC">
+                {% if pc.discount %}
+                    <span class="badge bg-danger">{{ pc.discount }}% OFF</span>
+                {% endif %}
+                <h3 class="pc-title">{{ pc.name }}</h3>
+                <p class="pc-subtitle">{{ pc.description }}</p>
+                <img src="{{ url_for('static', filename=pc.image) }}" alt="{{ pc.name }}">
                 <ul class="pc-specs">
-                    <li>🖥 AMD Ryzen 5 5600 Processor</li>
-                    <li>❄️ AMD Wraith Stealth Cooler</li>
-                    <li>🛠 Gigabyte B550M DS3H AC Rev1.7</li>
-                    <li>🎮 Zotac RTX 3050 Solo - 6GB</li>
-                    <li>🧠 16GB Lexar Ares RGB DDR4 3600MHz (8x2)</li>
-                    <li>💾 1TB Klevv C910 Gen4 SSD</li>
-                    <li>⚡ 550W Gigabyte 80+ Silver (ATX3.0)</li>
+                    {% for component in pc.components %}
+                    <li>{{ component }}</li>
+                    {% endfor %}
                 </ul>
-                <p class="pc-price">SGD $715 <span class="old-price">$822</span></p>
-                <!-- Change Add to Cart button to View Product with full width -->
-                <a href="/preview/PB001" class="view-product-btn">VIEW PRODUCT</a>
+                <p class="pc-price">SGD ${{ pc.price }} 
+                    {% if pc.old_price %}
+                        <span class="old-price">${{ pc.old_price }}</span>
+                    {% endif %}
+                </p>
+                <a href="{{ url_for('preview', product_id=pc.id) }}" class="view-product-btn">VIEW PRODUCT</a>
             </div>
-
-            <div class="pc-card">
-                <span class="badge bg-danger">SUPER DEAL</span>
-                <h3 class="pc-title">The Monster</h3>
-                <p class="pc-subtitle">Ryzen 7 7800X3D + GeForce RTX 4070 SUPER</p>
-                <img src="/static/images/monster_pc.jpg" alt="The Monster PC">
-                <ul class="pc-specs">
-                    <li>🖥 AMD Ryzen 7 7800X3D Processor</li>
-                    <li>❄️ Deepcool AK400 DIGITAL</li>
-                    <li>🛠 Gigabyte B650M Gaming Wifi</li>
-                    <li>🎮 Gigabyte RTX 4070 Super Windforce OC - 12GB</li>
-                    <li>🧠 32GB Lexar Thor RGB DDR5 6000MHz CL38 (16x2)</li>
-                    <li>💾 1TB Klevv C910 Gen4 SSD</li>
-                    <li>⚡ 850W Thermaltight 80+ Gold</li>
-                </ul>
-                <p class="pc-price">SGD $2,015 <span class="old-price">$2,294</span></p>
-                <!-- Change Add to Cart button to View Product with full width -->
-                <a href="/preview/PB002" class="view-product-btn">VIEW PRODUCT</a>
-            </div>
+            {% endfor %}
         </div>
     </div>
 

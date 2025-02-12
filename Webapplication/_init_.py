@@ -18,9 +18,49 @@ def initialize_cart():
     if 'cart' not in session:
         session['cart'] = []
 
+
+
 @app.route('/prebuilds')
 def prebuilds():
-    return render_template('prebuild.html')
+    emoji_mapping = {
+        "Processor": "🖥", "CPU": "🖥",
+        "Cooler": "❄️",
+        "Motherboard": "🛠",
+        "GPU": "🎮", "Graphics Card": "🎮",
+        "RAM": "🧠", "Memory": "🧠",
+        "SSD": "💾", "HDD": "💾", "Storage": "💾",
+        "Power Supply": "⚡", "PSU": "⚡"
+    }
+
+    prebuilts = []
+    with shelve.open(DATABASE) as db:
+        for product_id, item in db.items():
+            if product_id.startswith('PB'):
+                item['id'] = product_id
+
+                new_components = []
+                for comp in item.get('components', []):
+                    if isinstance(comp, dict) and "tags" in comp and "name" in comp:
+                        assigned_emoji = "💻"  
+
+                        for tag in comp["tags"]:
+                            if tag in emoji_mapping:
+                                assigned_emoji = emoji_mapping[tag]
+                                break
+
+                        new_components.append(f"{assigned_emoji} {comp['name']}")  # ✅ Tags are NOT passed
+
+                    else:
+                        new_components.append(f"💻 {comp}")  # Fallback for unexpected formats
+
+                item['components'] = new_components  # ✅ Tags removed before sending to template
+                prebuilts.append(item)
+
+    return render_template('prebuild.html', prebuilts=prebuilts)
+
+
+
+
 
 @app.route('/update_cart_quantity', methods=['POST'])
 def update_cart_quantity():
@@ -50,7 +90,7 @@ def submit_review():
     if not product_id or rating < 1 or rating > 5:
         return jsonify(success=False, message="Invalid input")
 
-    username = session.get('username')  # Fetch username instead of email
+    username = session.get('username')  
 
     with shelve.open(DATABASE, writeback=True) as db:
         if product_id not in db:
@@ -60,7 +100,7 @@ def submit_review():
         if 'reviews' not in product:
             product['reviews'] = []
 
-        # Store username instead of email
+        
         review_data = {'rating': rating, 'comment': comment}
         if username:
             review_data['username'] = username
@@ -77,15 +117,45 @@ def submit_review():
 
 @app.route('/preview/<product_id>')
 def preview(product_id):
+    emoji_mapping = {
+        "Processor": "🖥", "CPU": "🖥",
+        "Cooler": "❄️",
+        "Motherboard": "🛠",
+        "GPU": "🎮", "Graphics Card": "🎮",
+        "RAM": "🧠", "Memory": "🧠",
+        "SSD": "💾", "HDD": "💾", "Storage": "💾",
+        "Power Supply": "⚡", "PSU": "⚡"
+    }
+
     with shelve.open(DATABASE) as db:
         if product_id in db:
             product = db[product_id]
             product['reviews'] = product.get('reviews', [])
             product['average_rating'] = product.get('average_rating', 0)
+
+            # ✅ Process components: Add emoji & remove tags
+            new_components = []
+            for comp in product.get('components', []):
+                if isinstance(comp, dict) and "tags" in comp and "name" in comp:
+                    assigned_emoji = "💻"  # Default emoji
+
+                    for tag in comp["tags"]:
+                        if tag in emoji_mapping:
+                            assigned_emoji = emoji_mapping[tag]
+                            break  # Stop at the first match
+
+                    new_components.append(f"{assigned_emoji} {comp['name']}")  # ✅ Tags are removed
+                else:
+                    new_components.append(f"💻 {comp}")  # Fallback for unexpected formats
+
+            product['components'] = new_components  # ✅ Pass only name + emoji
+
             return render_template('preview.html', product=product, product_id=product_id)
+
         else:
             flash('Product not found!', 'error')
             return redirect(url_for('index'))
+
         
         
 @app.route('/add_to_cart', methods=['POST'])
@@ -213,90 +283,121 @@ def all_products():
 
 @app.route('/populate')
 def populate():
-    with shelve.open(DATABASE) as db:
+    with shelve.open(DATABASE, writeback=True) as db:
         db['CP001'] = {
+            'id': 'CP001',
             'name': 'CPU Intel i5',
             'price': 200.0,
+            'old_price': 234.0,
+            'discount': 14,
             'stock': 50,
             'image': 'images/cpu_intel_i5.jpg',
-            'description': 'The Intel Core i5 is a versatile mid-range processor offering strong multi-core performance. Ideal for gaming, content creation, and everyday tasks, it balances efficiency with power to keep your PC running smoothly.'
+            'description': 'The Intel Core i5 is a versatile mid-range processor offering strong multi-core performance.',
+            'tags': ["Processor", "CPU"]
         }
         db['CP002'] = {
+            'id': 'CP002',
             'name': 'GPU NVIDIA GTX 1660',
             'price': 400.0,
+            'old_price': 460.0,
+            'discount': 21,
             'stock': 30,
             'image': 'images/gpu_nvidia_gtx_1660.jpg',
-            'description': 'The Nvidia GTX 1660 is a budget-friendly yet powerful GPU, providing solid performance for 1080p gaming. With great value for money, it’s an ideal choice for gamers looking for smooth performance without breaking the bank.'
+            'description': 'The Nvidia GTX 1660 is a budget-friendly yet powerful GPU for 1080p gaming.',
+            'tags': ["GPU", "Graphics Card"]
         }
         db['CP003'] = {
+            'id': 'CP003',
             'name': 'RAM 16GB DDR4',
-            'price': 80.0,
+            'price': 68.80,
+            'old_price': 80.0,
+            'discount': 14,
             'stock': 100,
             'image': 'images/ram_16gb_ddr4.jpg',
-            'description': 'Upgrade your PC with 16GB of DDR4 RAM for enhanced multitasking and faster performance. This reliable and high-speed memory is perfect for gaming, video editing, and handling heavy workloads without lag.'
+            'description': 'Upgrade your PC with 16GB of DDR4 RAM for faster performance in gaming and content creation.',
+            'tags': ["RAM", "Memory"]
         }
         db['CP004'] = {
+            'id': 'CP004',
             'name': 'Motherboard ASUS Prime',
             'price': 150.0,
             'stock': 25,
-            'image': 'motherboard_asus_prime.jpg',
-            'description': 'ASUS Prime motherboard'
+            'image': 'images/motherboard_asus_prime.jpg',
+            'description': 'The ASUS Prime motherboard provides a solid foundation for gaming and productivity.',
+            'tags': ["Motherboard"]
         }
         db['CP005'] = {
+            'id': 'CP005',
             'name': 'GeForce RTX 4070 Super',
             'price': 499.90,
+            'old_price': 600.0,
+            'discount': 17,
             'stock': 50,
             'image': 'images/rtx-4070.jpg',
-            'description': 'The GeForce RTX 4070 Super is a high-performance graphics card designed for gamers and content creators. With cutting-edge ray tracing and AI-enhanced graphics, it delivers ultra-smooth gameplay and stunning visuals for the latest titles.'
+            'description': 'The RTX 4070 Super delivers ultra-smooth gaming with ray tracing and AI-enhanced graphics.',
+            'tags': ["GPU", "Graphics Card"]
         }
         db['CP006'] = {
-            'name': 'G.Skill Trident Z5 Neo RGB (2x16GB DDR5-6000)',
+            'id': 'CP006',
+            'name': 'G.Skill Trident Z5 Neo RGB',
             'price': 189.00,
+            'old_price': 230.00,
+            'discount': 21,
             'stock': 30,
             'image': 'images/gskill-ram.jpg',
-            'description': 'Elevate your system with the G.Skill Trident Z5 Neo RGB memory. This 16GB DDR5 kit combines stunning RGB lighting with exceptional speed, perfect for high-end gaming, overclocking, and multitasking.'
+            'description': 'High-speed DDR5 RAM with stunning RGB lighting, ideal for gaming and overclocking.',
+            'tags': ["RAM", "Memory"]
         }
         db['CP007'] = {
+            'id': 'CP007',
             'name': 'AMD Ryzen 7 9700X',
             'price': 299.00,
+            'old_price': 349.00,
+            'discount': 15,
             'stock': 100,
             'image': 'images/amd-ryzen.jpg',
-            'description': 'The AMD Ryzen 7 9700X offers a powerful 8-core, 16-thread architecture, delivering incredible performance for demanding applications like gaming, video editing, and 3D rendering. Experience speed and efficiency at its finest.'
+            'description': 'A high-performance processor with 8 cores and 16 threads for gaming and content creation.',
+            'tags': ["Processor", "CPU"]
         }
+
         db['PB001'] = {
+            'id': 'PB001',
             'name': 'The Average',
             'price': 715.0,
             'stock': 10,
             'image': 'images/average_pc.jpg',
-            'description': 'Ryzen 5 5600 + GeForce RTX 3050',
+            'description': 'A balanced gaming PC with Ryzen 5 5600 and RTX 3050.',
             'components': [
-                "AMD Ryzen 5 5600 Processor",
-                "AMD Wraith Stealth Cooler",
-                "Gigabyte B550M DS3H AC Rev1.7",
-                "Zotac RTX 3050 Solo - 6GB",
-                "16GB Lexar Ares RGB DDR4 3600MHz (8x2)",
-                "1TB Klevv C910 Gen4 SSD",
-                "550W Gigabyte 80+ Silver (ATX3.0)"
+                {"name": "AMD Ryzen 5 5600 Processor", "tags": ["Processor", "CPU"]},
+                {"name": "AMD Wraith Stealth Cooler", "tags": ["Cooler"]},
+                {"name": "Gigabyte B550M DS3H AC Rev1.7", "tags": ["Motherboard"]},
+                {"name": "Zotac RTX 3050 Solo - 6GB", "tags": ["GPU", "Graphics Card"]},
+                {"name": "16GB Lexar Ares RGB DDR4 3600MHz (8x2)", "tags": ["RAM", "Memory"]},
+                {"name": "1TB Klevv C910 Gen4 SSD", "tags": ["SSD", "Storage"]},
+                {"name": "550W Gigabyte 80+ Silver (ATX3.0)", "tags": ["Power Supply", "PSU"]}
+            ]
+        }
+        db['PB002'] = {
+            'id': 'PB002',
+            'name': 'The Monster',
+            'price': 2015.0,
+            'stock': 5,
+            'image': 'images/monster_pc.jpg',
+            'description': 'A high-end gaming PC with Ryzen 7 7800X3D and RTX 4070 SUPER.',
+            'components': [
+                {"name": "AMD Ryzen 7 7800X3D Processor", "tags": ["Processor", "CPU"]},
+                {"name": "Deepcool AK400 DIGITAL", "tags": ["Cooler"]},
+                {"name": "Gigabyte B650M Gaming Wifi", "tags": ["Motherboard"]},
+                {"name": "Gigabyte RTX 4070 Super Windforce OC - 12GB", "tags": ["GPU", "Graphics Card"]},
+                {"name": "32GB Lexar Thor RGB DDR5 6000MHz CL38 (16x2)", "tags": ["RAM", "Memory"]},
+                {"name": "1TB Klevv C910 Gen4 SSD", "tags": ["SSD", "Storage"]},
+                {"name": "850W Thermaltight 80+ Gold", "tags": ["Power Supply", "PSU"]}
             ]
         }
 
-        db['PB002'] = {
-            'name': 'The Monster',
-            'price': 2015.0,
-            'stock': 5,  
-            'image': 'images/monster_pc.jpg',
-            'description': 'Ryzen 7 7800X3D + GeForce RTX 4070 SUPER',
-            'components': [
-                "AMD Ryzen 7 7800X3D Processor",
-                "Deepcool AK400 DIGITAL",
-                "Gigabyte B650M Gaming Wifi",
-                "Gigabyte RTX 4070 Super Windforce OC - 12GB",
-                "32GB Lexar Thor RGB DDR5 6000MHz CL38 (16x2)",
-                "1TB Klevv C910 Gen4 SSD",
-                "850W Thermaltight 80+ Gold"
-            ]
-        }
     return redirect(url_for('index'))
+
+
 
 @app.route('/details')
 def details():
@@ -315,7 +416,14 @@ def details():
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    products = []
+    with shelve.open(DATABASE) as db:
+        for product_id, item in db.items():
+            if not product_id.startswith('PB'):  
+                item['id'] = product_id  
+                products.append(item)
+
+    return render_template('home.html', products=products)
 
 @app.route('/createTradeIn', methods=['GET','POST'])
 def create_tradein():
@@ -589,7 +697,7 @@ def login():
             if email in db:
                 if db[email]['password'] == password:
                     session['email'] = email
-                    session['username'] = db[email]['username']  # Store the username in session
+                    session['username'] = db[email]['username']  
                     return redirect(url_for('home'))
                 else:
                     flash('Invalid password. Please try again.', 'error')
@@ -607,7 +715,7 @@ def admin():
     with shelve.open('users_db') as db:
         for email, details in db.items():
             users.append({
-                'username': details.get('username', 'N/A'),  # Retrieve username, default to 'N/A' if missing
+                'username': details.get('username', 'N/A'),  
                 'email': email,
                 'password': details['password']
             })
@@ -665,17 +773,17 @@ def admin_signup():
         email = form.email.data
         password = form.password.data
 
-        # Store the admin data in shelve, using the email as the key
+        
         with shelve.open('admin_db', writeback=True) as db:
-            # Check if the admin email already exists in the database
+            
             if email in db:
                 flash('Admin account already exists!', 'error')
                 return redirect(url_for('admin_signup'))
             
-            # Save the admin data with email as the key
+            
             db[email] = {'email': email, 'password': password}
             flash("Admin account created successfully!", 'success')
-            return redirect(url_for('admin_login'))  # Redirect to login after successful signup
+            return redirect(url_for('admin_login'))  
     
     return render_template('admin_signup.html', form=form)
 
@@ -686,18 +794,18 @@ def admin_login():
         admin_email = request.form.get('email')
         admin_password = request.form.get('password')
 
-        # Retrieve the admin credentials from the shelve database
+        
         with shelve.open('admin_db') as db:
-            # Check if the provided email exists in the database
+            
             admin_data = db.get(admin_email, None)
 
             if admin_data:
-                # Validate credentials from the database
+                
                 if admin_password == admin_data['password']:
                     session['admin_logged_in'] = True
                     session['admin_email'] = admin_email
                     flash('Admin logged in successfully!', 'success')
-                    return redirect(url_for('admin'))  # Redirect to the admin dashboard page
+                    return redirect(url_for('admin'))  
                 else:
                     flash('Invalid password. Please try again.', 'error')
             else:
@@ -724,15 +832,15 @@ def delete_review():
         if 'reviews' not in product or comment_index < 0 or comment_index >= len(product['reviews']):
             return jsonify(success=False, message="Invalid review index.")
 
-        # Remove the review
+        
         del product['reviews'][comment_index]
 
-        # Recalculate the average rating
+        
         if product['reviews']:
             total_ratings = sum(r['rating'] for r in product['reviews'])
             product['average_rating'] = round(total_ratings / len(product['reviews']), 1)
         else:
-            product['average_rating'] = 0  # No ratings left
+            product['average_rating'] = 0  
 
         db[product_id] = product
         return jsonify(success=True, average_rating=product['average_rating'], reviews=product['reviews'])

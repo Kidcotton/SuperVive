@@ -111,72 +111,27 @@
     <div class="container">
         <div class="hero-section">
         </div>
-
         <div class="sales-deals">
             <h2 class="text-center">Sales Deals</h2>
             <div class="product-grid">
-
+                {% for product in products %}
                 <div class="card position-relative">
-                    <div class="discount-badge">17% OFF</div>
-                    <img src="{{ url_for('static', filename='images/rtx-4070.jpg') }}" alt="GeForce RTX 4070 Super">
+                    {% if product.discount %}
+                        <div class="discount-badge">{{ product.discount }}% OFF</div>
+                    {% endif %}
+                    <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
                     <div class="card-body">
-                        <h3 class="card-title">GeForce RTX 4070 Super</h3>
-                        <p class="stock-info">Only 500 stocks left!</p>
-                        <p class="price">$499.90 <span class="old-price">$600</span></p>
-                        <a href="/preview/CP005" class="btn btn-primary">View Product</a>
+                        <h3 class="card-title">{{ product.name }}</h3>
+                        <p class="stock-info">Only {{ product.stock }} stocks left!</p>
+                        <p class="price">${{ product.price }} 
+                            {% if product.old_price %}
+                                <span class="old-price">${{ product.old_price }}</span>
+                            {% endif %}
+                        </p>
+                        <a href="{{ url_for('preview', product_id=product.id) }}" class="btn btn-primary">View Product</a>
                     </div>
                 </div>
-                <div class="card position-relative">
-                    <div class="discount-badge">21% OFF</div>
-                    <img src="{{ url_for('static', filename='images/gskill-ram.jpg') }}" alt="GeForce RTX 4070 Super">
-                    <div class="card-body">
-                        <h3 class="card-title">G.Skill Trident Z5 Neo RGB</h3>
-                        <p class="stock-info">Only 700 stocks left!</p>
-                        <p class="price">$189 <span class="old-price">$230</span></p>
-                        <a href="/preview/CP006" class="btn btn-primary">View Product</a>
-                    </div>
-                </div>
-
-                <div class="card position-relative">
-                    <div class="discount-badge">21% OFF</div>
-                    <img src="{{ url_for('static', filename='images/amd-ryzen.jpg') }}" alt="AMD Ryzen 7 9700X">
-                    <div class="card-body">
-                        <h3 class="card-title">AMD Ryzen 7 9700X</h3>
-                        <p class="stock-info">Only 800 stocks left!</p>
-                        <p class="price">$299 <span class="old-price">$349</span></p>
-                        <a href="/preview/CP007" class="btn btn-primary">View Product</a>
-                    </div>
-                </div>
-                <div class="card position-relative">
-                    <div class="discount-badge">21% OFF</div>
-                    <img src="{{ url_for('static', filename='images/gpu_nvidia_gtx_1660.jpg') }}" alt="Nvidia GTX 1660 GPU">
-                    <div class="card-body">
-                        <h3 class="card-title">Nvidia GTX 1660 GPU</h3>
-                        <p class="stock-info">Only 800 stocks left!</p>
-                        <p class="price">$400 <span class="old-price">$460</span></p>
-                        <a href="/preview/CP002" class="btn btn-primary">View Product</a>
-                    </div>
-                </div>
-                <div class="card position-relative">
-                    <div class="discount-badge">21% OFF</div>
-                    <img src="{{ url_for('static', filename='images/cpu_intel_i5.jpg') }}" alt="CPU Intel i5">
-                    <div class="card-body">
-                        <h3 class="card-title">CPU Intel i5</h3>
-                        <p class="stock-info">Only 300 stocks left!</p>
-                        <p class="price">$200 <span class="old-price">$234</span></p>
-                        <a href="/preview/CP001" class="btn btn-primary">View Product</a>
-                    </div>
-                </div>
-                <div class="card position-relative">
-                    <div class="discount-badge">21% OFF</div>
-                    <img src="{{ url_for('static', filename='images/ram_16gb_ddr4.jpg') }}" alt="RAM 16GB DDR4">
-                    <div class="card-body">
-                        <h3 class="card-title">RAM 16GB DDR4</h3>
-                        <p class="stock-info">Only 100 stocks left!</p>
-                        <p class="price">$68.80 <span class="old-price">$80</span></p>
-                        <a href="/preview/CP003" class="btn btn-primary">View Product</a>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
