@@ -762,7 +762,9 @@ def inject_user():
 def inject_user():
     return dict(username=session.get('username'))
 
-
+@app.context_processor
+def inject_request():
+    return dict(request=request)
 
 if __name__ == '__main__':
     app.run(debug=True)
