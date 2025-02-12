@@ -48,12 +48,12 @@ def prebuilds():
                                 assigned_emoji = emoji_mapping[tag]
                                 break
 
-                        new_components.append(f"{assigned_emoji} {comp['name']}")  # ✅ Tags are NOT passed
+                        new_components.append(f"{assigned_emoji} {comp['name']}") 
 
                     else:
-                        new_components.append(f"💻 {comp}")  # Fallback for unexpected formats
+                        new_components.append(f"💻 {comp}")  
 
-                item['components'] = new_components  # ✅ Tags removed before sending to template
+                item['components'] = new_components  
                 prebuilts.append(item)
 
     return render_template('prebuild.html', prebuilts=prebuilts)
@@ -133,22 +133,20 @@ def preview(product_id):
             product['reviews'] = product.get('reviews', [])
             product['average_rating'] = product.get('average_rating', 0)
 
-            # ✅ Process components: Add emoji & remove tags
+            
             new_components = []
             for comp in product.get('components', []):
                 if isinstance(comp, dict) and "tags" in comp and "name" in comp:
-                    assigned_emoji = "💻"  # Default emoji
-
+                    assigned_emoji = "💻"  
                     for tag in comp["tags"]:
                         if tag in emoji_mapping:
                             assigned_emoji = emoji_mapping[tag]
-                            break  # Stop at the first match
-
-                    new_components.append(f"{assigned_emoji} {comp['name']}")  # ✅ Tags are removed
+                            break  
+                    new_components.append(f"{assigned_emoji} {comp['name']}")  
                 else:
-                    new_components.append(f"💻 {comp}")  # Fallback for unexpected formats
+                    new_components.append(f"💻 {comp}")  
 
-            product['components'] = new_components  # ✅ Pass only name + emoji
+            product['components'] = new_components 
 
             return render_template('preview.html', product=product, product_id=product_id)
 
