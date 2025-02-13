@@ -402,25 +402,27 @@ def populate():
 @app.route('/details')
 def details():
     users_dict = {}
+    discount_codes = []  # This list will store all generated codes
     try:
         db = shelve.open('user.db', 'r')
         users_dict = db['Users']
         db.close()
     except Exception as e:
         print(f"Error reading from database: {e}")
-        users_dict = {}
 
     users_list = []
     for key in users_dict:
         user = users_dict.get(key)
         component = user.get_types_component()
         condition = user.get_condition()
-        user.discount = discount(component, condition)  # Calculate discount
-        code, value = generate_discount_code(component, condition)  # Generate discount code
-        user.discount_code = code  # Save the code in the user object
+        code, value = generate_discount_code(component, condition, discount_codes)
+        user.discount = value
+        user.discount_code = code
         users_list.append(user)
 
+    print(f"All generated discount codes and their values: {discount_codes}")  # Final print of all codes
     return render_template('details.html', users_list=users_list)
+
 
 @app.route('/')
 def home():
@@ -509,6 +511,8 @@ def generate_discount_code(component, condition, discount_codes=[]):
     code = ''.join(random.choices(characters, k=8))
     discount_value = discount(component, condition)
     discount_codes.append((code, discount_value))
+    print(f"Generated code: {code}, Value: {discount_value}")  # Debug print
+    print(f"Current list of discount codes: {discount_codes}")  # Debug print
     return code, discount_value
 
 def discount(component, condition):
