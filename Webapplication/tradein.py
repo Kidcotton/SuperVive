@@ -1,3 +1,5 @@
+import random
+
 class tradein:
     count_id =0
     def __init__(self,pc_component,types_component,condition,remarks):
@@ -7,6 +9,7 @@ class tradein:
         self.__types_component = types_component
         self.__condition = condition
         self.__remarks = remarks
+
 
     def set_remarks(self,remarks):
         self.__remarks = remarks

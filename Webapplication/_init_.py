@@ -7,6 +7,8 @@ from Forms import CreateUserForm, CreateCustomerForm
 from User import User
 from Form import AdminSignUpForm
 from wtforms import Form, StringField, PasswordField, validators
+import random
+import string
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
@@ -400,17 +402,25 @@ def populate():
 @app.route('/details')
 def details():
     users_dict = {}
-    db = shelve.open('user.db', 'r')
-    users_dict = db['Users']
-    db.close()
+    try:
+        db = shelve.open('user.db', 'r')
+        users_dict = db['Users']
+        db.close()
+    except Exception as e:
+        print(f"Error reading from database: {e}")
+        users_dict = {}
+
     users_list = []
     for key in users_dict:
         user = users_dict.get(key)
         component = user.get_types_component()
         condition = user.get_condition()
-        user.discount = discount(component, condition)
+        user.discount = discount(component, condition)  # Calculate discount
+        code, value = generate_discount_code(component, condition)  # Generate discount code
+        user.discount_code = code  # Save the code in the user object
         users_list.append(user)
-        return render_template('details.html', users_list=users_list)
+
+    return render_template('details.html', users_list=users_list)
 
 @app.route('/')
 def home():
@@ -493,6 +503,13 @@ def delete_tradein(id):
     db['Users'] = users_dict
     db.close()
     return redirect(url_for('retrieve_TradeIn'))
+
+def generate_discount_code(component, condition, discount_codes=[]):
+    characters = string.ascii_uppercase + string.digits
+    code = ''.join(random.choices(characters, k=8))
+    discount_value = discount(component, condition)
+    discount_codes.append((code, discount_value))
+    return code, discount_value
 
 def discount(component, condition):
     discounts = {
@@ -589,11 +606,7 @@ def discount(component, condition):
         ('PS', 'Barely-Used'): 40,
         ('PS', 'Perfect'): 50,
     }
-    discount_value = discounts.get((component, condition))
-    if discount_value is None:
-        return "Error in finding discount"
-    return discount_value
-
+    return discounts.get((component, condition), "No discount found")
 class ForgotPasswordForm(Form):
     email = StringField('Email Address:', [
         validators.DataRequired(),
