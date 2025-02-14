@@ -45,7 +45,6 @@
         <div id="cart-items"></div>
         <div class="text-end">
             <h4>Subtotal: <span id="subtotal">$0.00</span></h4>
-            <h4>Savings: <span id="savings">$0.00</span></h4>
             <h3>Total: <span id="total">$0.00</span></h3>
             <button class="btn btn-primary">Checkout</button>
         </div>
@@ -59,7 +58,6 @@
                     const cartItems = document.getElementById('cart-items');
                     cartItems.innerHTML = '';
                     let subtotal = 0;
-                    let savings = 0;
 
                     data.forEach(item => {
                         const itemElement = document.createElement('div');
@@ -90,12 +88,10 @@
 
                         cartItems.appendChild(itemElement);
                         subtotal += item.price * item.quantity;
-                        savings += 10 * item.quantity;
                     });
 
                     document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-                    document.getElementById('savings').textContent = `$${savings.toFixed(2)}`;
-                    document.getElementById('total').textContent = `$${(subtotal - savings).toFixed(2)}`;
+                    document.getElementById('total').textContent = `$${subtotal.toFixed(2)}`;
                 });
         }
 
