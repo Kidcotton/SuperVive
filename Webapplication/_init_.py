@@ -20,7 +20,23 @@ def initialize_cart():
     if 'cart' not in session:
         session['cart'] = []
 
+@app.route('/checkout', methods=['POST'])
+def checkout():
+    if 'cart' not in session:
+        session['cart'] = []
 
+    cart = session.get('cart', [])
+    total_price = sum(item['price'] * item['quantity'] for item in cart)
+
+    # Store the total in session to access on the checkout page
+    session['total_price'] = total_price
+
+    return redirect(url_for('checkout_page'))
+
+@app.route('/checkoutpage')
+def checkout_page():
+    total_price = session.get('total_price', 0)
+    return render_template('checkoutpage.html', total_price=total_price)
 
 @app.route('/prebuilds')
 def prebuilds():
