@@ -3,213 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Checkout Page</title>
     <style>
+        :root {
+            --primary-color: #1a1a1a;
+            --error-color: #dc2626;
+            --border-color: #e5e7eb;
+            --text-color: #374151;
+        }
+
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            padding: 20px;
-            background-color: #f4f4f4;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+            padding: 2rem 1rem;
+            color: var(--text-color);
         }
 
         .container {
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
         }
 
-        .order-summary {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 30px;
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 300;
+            color: #111827;
+            margin-bottom: 0.5rem;
         }
 
-        .payment-methods {
-            margin-bottom: 30px;
+        .header p {
+            color: #6b7280;
+            font-size: 0.875rem;
         }
 
-        .payment-method {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .payment-method:hover {
-            background: #f8f9fa;
-        }
-
-        .payment-method.selected {
-            border-color: #007bff;
-            background: #f8f9fa;
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
 
-        label {
+        .form-group label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
         }
 
-        input[type="text"],
-        input[type="email"] {
+        .form-group input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            transition: all 0.2s;
         }
 
-        .btn {
-            background: #007bff;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
+        .form-group input:focus {
+            outline: none;
+            border-color: #9ca3af;
+            box-shadow: 0 0 0 3px rgba(156, 163, 175, 0.2);
         }
 
-        .btn:hover {
-            background: #0056b3;
+        .error {
+            color: var(--error-color);
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
         }
 
-        .card-inputs {
+        .grid {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 10px;
+            gap: 1rem;
         }
 
-        .payment-methods img{
-            width:100px;
-            height:auto;
-            max-width:100%;
+        .grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 300;
+            color: #111827;
+            margin: 2rem 0 1rem;
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tab {
+            padding: 0.75rem;
+            text-align: center;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .submit-button:hover {
+            background: #2d2d2d;
+        }
+
+        @media (max-width: 640px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation classes */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.5s ease-out forwards;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
+    <div class="container animate-in">
+        <header class="header">
             <h1>Checkout</h1>
-        </div>
+            <p>Total: ${{ total_price }} </p>
+        </header>
 
-        <div class="order-summary">
-            <h2>Order Summary</h2>
-            <p>Total Amount: $<span id="total-price">{{ total_price }}</span></p>
-        </div>
+        <div class="card">
+            <form id="checkoutForm">
+                <h2 class="section-title">Shipping Address</h2>
 
-        <div class="payment-methods">
-            <h2>Select Payment Method</h2>
-            <div class="payment-method selected" data-method="card">
-                <img src="static/images/payment.jpg" alt="Credit Card" />
-                Credit/Debit Card
-            </div>
-            <div class="payment-method" data-method="paypal">
-                <img src="/static/images/paypal2.webp" alt="PayPal" />
-                PayPal
-            </div>
-        </div>
-
-        <form id="payment-form">
-            <div id="card-payment">
                 <div class="form-group">
-                    <label for="cardholder">Cardholder Name</label>
-                    <input type="text" id="cardholder" required>
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                    <div class="error" id="nameError"></div>
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" required>
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" required>
+                    <div class="error" id="addressError"></div>
                 </div>
 
-                <div class="form-group">
-                    <label for="card-number">Card Number</label>
-                    <input type="text" id="card-number" placeholder="1234 5678 9012 3456" required>
-                </div>
-
-                <div class="form-group card-inputs">
-                    <div>
-                        <label for="expiry">Expiry Date</label>
-                        <input type="text" id="expiry" placeholder="MM/YY" required>
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" required>
+                        <div class="error" id="cityError"></div>
                     </div>
-                    <div>
-                        <label for="cvv">CVV</label>
-                        <input type="text" id="cvv" placeholder="123" required>
+
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <input type="text" id="state" name="state" required>
+                        <div class="error" id="stateError"></div>
                     </div>
                 </div>
-            </div>
 
-            <div id="paypal-payment" style="display: none;">
-                <p>You will be redirected to PayPal to complete your payment.</p>
-            </div>
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label for="zip">ZIP Code</label>
+                        <input type="text" id="zip" name="zip" required pattern="\d{6}">
+                        <div class="error" id="zipError"></div>
+                    </div>
 
-            <button type="submit" class="btn">Pay Now</button>
-        </form>
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <input type="text" id="country" name="country" required>
+                        <div class="error" id="countryError"></div>
+                    </div>
+                </div>
+
+                <h2 class="section-title">Payment Method</h2>
+
+                <div class="tabs">
+                    <button type="button" class="tab active" data-tab="card">Credit Card</button>
+                    <button type="button" class="tab" data-tab="paypal">PayPal</button>
+                </div>
+
+                <div id="cardPayment">
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" name="cardNumber" required pattern="\d{16}">
+                        <div class="error" id="cardNumberError"></div>
+                    </div>
+
+                    <div class="grid grid-2">
+                        <div class="form-group">
+                            <label for="expiryDate">Expiry Date</label>
+                            <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" required pattern="\d{4}">
+                            <div class="error" id="expiryDateError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" name="cvv" required pattern="\d{3}">
+                            <div class="error" id="cvvError"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="paypalPayment" style="display: none;">
+                    <p style="text-align: center; padding: 2rem; color: #6b7280;">
+                        PayPal integration coming soon
+                    </p>
+                </div>
+
+                <button type="submit" class="submit-button">Place Order</button>
+            </form>
+        </div>
     </div>
 
     <script>
-        $(document).ready(function() {
-            // Payment method selection
-            $('.payment-method').click(function() {
-                $('.payment-method').removeClass('selected');
-                $(this).addClass('selected');
+        // Simple form validation
+        const form = document.getElementById('checkoutForm');
+        const tabs = document.querySelectorAll('.tab');
+        const cardPayment = document.getElementById('cardPayment');
+        const paypalPayment = document.getElementById('paypalPayment');
 
-                const method = $(this).data('method');
-                if (method === 'card') {
-                    $('#card-payment').show();
-                    $('#paypal-payment').hide();
+        // Tab switching
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                if (tab.dataset.tab === 'card') {
+                    cardPayment.style.display = 'block';
+                    paypalPayment.style.display = 'none';
                 } else {
-                    $('#card-payment').hide();
-                    $('#paypal-payment').show();
+                    cardPayment.style.display = 'none';
+                    paypalPayment.style.display = 'block';
+                }
+            });
+        });
+
+        // Form validation
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let isValid = true;
+
+            // Reset all errors
+            document.querySelectorAll('.error').forEach(error => {
+                error.textContent = '';
+            });
+
+            // Validate each required field
+            form.querySelectorAll('input[required]').forEach(input => {
+                if (!input.value.trim()) {
+                    document.getElementById(`${input.id}Error`).textContent =
+                        `${input.id.charAt(0).toUpperCase() + input.id.slice(1)} is required`;
+                    isValid = false;
+                } else if (input.pattern && !new RegExp(input.pattern).test(input.value)) {
+                    document.getElementById(`${input.id}Error`).textContent =
+                        `Please enter a valid ${input.id.charAt(0).toUpperCase() + input.id.slice(1)}`;
+                    isValid = false;
                 }
             });
 
-            // Form submission handler
-            $('#payment-form').submit(function(e) {
-                e.preventDefault();
-
-                const selectedMethod = $('.payment-method.selected').data('method');
-
-                if (selectedMethod === 'card') {
-                    // Here you would integrate with your payment processor's API
-                    console.log('Processing card payment...');
-                    // Example of calling a payment API:
-                    // processCardPayment({
-                    //     cardNumber: $('#card-number').val(),
-                    //     expiry: $('#expiry').val(),
-                    //     cvv: $('#cvv').val(),
-                    //     amount: $('#total-price').text()
-                    // });
-                } else {
-                    // Here you would integrate with PayPal's API
-                    console.log('Redirecting to PayPal...');
-                    // Example of initiating PayPal checkout:
-                    // initiatePayPalCheckout({
-                    //     amount: $('#total-price').text()
-                    // });
-                }
-            });
+            if (isValid) {
+                alert('Order placed successfully!');
+                form.reset();
+            }
         });
     </script>
 </body>
