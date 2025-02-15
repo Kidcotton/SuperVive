@@ -29,12 +29,15 @@
                 <td>{{ product.name }}</td>
                 <td>${{ product.price }}</td>
                 <td>{{ product.stock }}</td>
-                
+
                 <td>
-                    <img src="{{ url_for('static', filename='images/' + product.image if product.image else 'images/default.jpg') }}" 
-                    alt="{{ product.name }}" style="max-width: 100px;">
-               
-                </td>
+                        {% if product.image %}
+                            <img src="{{ url_for('static', filename='images/' + product.image.split('/')[-1]) }}" alt="{{ product.name }}" width="100">
+                        {% else %}
+                            No Image
+                        {% endif %}
+                    </td>
+                                    </td>
                 <td>{{ product.description }}</td>
                 <td>
                     <a href="/edit/{{ product.id }}" class="btn btn-primary btn-sm">Edit</a>
