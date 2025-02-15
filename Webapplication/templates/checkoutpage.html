@@ -156,6 +156,19 @@
         .animate-in {
             animation: fadeIn 0.5s ease-out forwards;
         }
+
+        #price-label{
+            color:white;
+        }
+
+        .item-header p{
+            color:white;
+        }
+
+        .paypal-button-row paypal-button-number-0 paypal-button-layout-vertical paypal-button-number-single paypal-button-env-production paypal-button-color-gold paypal-button-text-color-black paypal-logo-color-blue   paypal-button-shape-rect{
+            position:absolute;
+            float:center;
+        }
     </style>
 </head>
 <body>
@@ -244,7 +257,14 @@
                     </p>
                 </div>
 
-                <button type="submit" class="submit-button">Place Order</button>
+                <script src="https://www.paypal.com/sdk/js?client-id=BAAQCea0ydWWp1QL83JJ1XskzvaHLtl8xX1OD4Vdzyqm8OJozHe8FgrugYQIv61ZwoiZrbch9yOiarm0Ek&components=hosted-buttons&disable-funding=venmo&currency=SGD"></script>
+                <div id="paypal-container-R36TSBYM2PJ78"></div>
+                <script>
+                    paypal.HostedButtons({
+                    hostedButtonId: "R36TSBYM2PJ78",
+                    }).render("#paypal-container-R36TSBYM2PJ78")
+                </script>
+
             </form>
         </div>
     </div>

@@ -435,15 +435,12 @@ def details():
         component = user.get_types_component()
         condition = user.get_condition()
 
-        # Call the corrected function with only two parameters
         code, value = generate_discount_code(component, condition)
 
         user.discount = value
         user.discount_code = code
         users_list.append(user)
-
-    print(f"All generated discount codes and their values: {discount_codes}")  # Final print of all codes
-    return render_template('details.html', users_list=users_list)
+        return render_template('details.html', users_list=users_list)
 
 
 @app.route('/')
@@ -482,9 +479,14 @@ def create_tradein():
 @app.route('/retrieveTradeIn')
 def retrieve_TradeIn():
     users_dict = {}
-    db = shelve.open('user.db','r')
-    users_dict = db['Users']
+    db = shelve.open('user.db', 'c')
+    try:
+        users_dict = db['Users']
+    except KeyError:
+        # Handle the case where 'Users' key does not exist
+        users_dict = {}
     db.close()
+
     users_list = []
     for key in users_dict:
         user = users_dict.get(key)

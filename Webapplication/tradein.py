@@ -1,5 +1,6 @@
 import random
 
+
 class tradein:
     count_id =0
     def __init__(self,pc_component,types_component,condition,remarks):
