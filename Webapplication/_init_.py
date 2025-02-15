@@ -244,7 +244,7 @@ def index():
 @app.route('/add_product', methods=['GET', 'POST'])
 def add_product():
     if request.method == 'POST':
-        # Your existing POST logic
+
         product_id = request.form['product_id'].strip()
         name = request.form['name'].strip()
         price = float(request.form['price'])
@@ -255,22 +255,22 @@ def add_product():
         image_filename = None
         if image and image.filename:
             try:
-                # Define image storage path
-                image_folder = os.path.join('Webapplication', 'static', 'images')
-                os.makedirs(image_folder, exist_ok=True)  # Ensure directory exists
 
-                # Secure filename to prevent injection issues
+                image_folder = os.path.join('Webapplication', 'static', 'images')
+                os.makedirs(image_folder, exist_ok=True)
+
+
                 filename = secure_filename(f"{product_id}{image.filename}")
                 image_path = os.path.join(image_folder, filename)
                 image.save(image_path)
 
-                # Save only relative path for database & HTML usage
+
                 image_filename = f"images/{filename}"
             except Exception as e:
                 flash(f"Error saving image: {str(e)}", 'error')
                 return redirect(url_for('add_product'))
 
-        # Store product in the database
+
         with shelve.open(DATABASE, writeback=True) as db:
             if product_id in db:
                 flash(f"Product ID '{product_id}' already exists!", 'error')
@@ -281,14 +281,14 @@ def add_product():
                 'price': price,
                 'stock': stock,
                 'description': description,
-                'image': image_filename  # Can be None if no image uploaded
+                'image': image_filename
             }
 
         flash(f"Product '{name}' added successfully!", 'success')
         return redirect(url_for('index'))
 
-    # Handle GET requests
-    return render_template('add_product.html')  # Render the form template
+
+    return render_template('add_product.html')
 
 @app.route('/edit/<item_id>', methods=['GET', 'POST'])
 def edit_stock(item_id):
