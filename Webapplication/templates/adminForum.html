@@ -1,32 +1,213 @@
-
-
-
-
 {% extends "base.html" %}
-{% block title %}Library Loan System - Admin{% endblock %}
+{% block title %}Admin Forum - SuperVive{% endblock %}
+
 {% block content %}
+<head>
+   <style>
+    /* Ensure content doesn't get blocked by the navbar */
+    body {
+        padding-top: 80px; /* Adjust based on the height of your navbar */
+        background-color: #fffff; /* Match customer forum background */
+        color: #fff; /* Match customer forum text color */
+    }
 
+    /* Admin Comment Form Styling */
+    .comment-form {
+        background: #444; /* Match customer forum form background */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        margin: 20px auto; /* Center the form */
+        max-width: 800px; /* Limit the width */
+    }
 
+    /* Comment Item Styling */
+    .comment-item {
+        background: #555; /* Match customer forum comment background */
+        padding: 15px;
+        border-left: 5px solid #007bff; /* Match customer forum border */
+        border-radius: 5px;
+        margin-bottom: 10px;
+        position: relative;
+        max-width: 800px; /* Limit the width */
+        margin: 10px auto; /* Center the comments */
+    }
 
-<div class="admin-container">
-    <h1 class="admin-title">Admin - Manage Comments</h1>
-    <ul class="comment-list">
-        {% for comment in comments %}
-        <li class="comment-item {% if comment.is_admin %}admin-comment{% endif %}">
-            <div class="comment-content">
-                <strong class="comment-author">{{ comment.name }}</strong>
-                <p class="comment-text">{{ comment.comment }}</p>
+    /* Comment Author Styling */
+    .comment-author {
+        font-weight: bold;
+        color: #007bff; /* Blue for comment authors */
+    }
+
+    /* Admin Name Styling */
+    .admin-name {
+        color: red; /* Keep admin names red */
+        font-weight: bold;
+    }
+
+    /* Edit and Delete Buttons */
+    .edit-delete-buttons {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+
+    .edit-delete-buttons button {
+        margin-left: 5px;
+        color: #fff; /* White text for buttons */
+        border: none;
+        border-radius: 4px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+    /* Edit Button Styling */
+    .edit-delete-buttons button.edit {
+        background-color: #ffc107; /* Yellow for edit button */
+    }
+
+    .edit-delete-buttons button.edit:hover {
+        background-color: #e0a800; /* Darker yellow on hover */
+    }
+
+    /* Delete Button Styling */
+    .edit-delete-buttons button.delete {
+        background-color: #dc3545; /* Red for delete button */
+    }
+
+    .edit-delete-buttons button.delete:hover {
+        background-color: #c82333; /* Darker red on hover */
+    }
+
+    /* Reply Item Styling */
+    .reply-item {
+        background: #444; /* Match customer forum reply background */
+        padding: 10px;
+        border-left: 3px solid #6c757d; /* Match customer forum reply border */
+        border-radius: 5px;
+        margin-top: 5px;
+        position: relative;
+    }
+
+    .reply-author {
+        font-weight: bold;
+        color: #007bff; /* Match customer forum reply author color */
+    }
+
+    .reply-text {
+        display: block;
+        margin-top: 5px;
+        color: #fff; /* Match customer forum text color */
+    }
+
+    /* Reply Form Styling */
+    .reply-form {
+        background: #444; /* Match customer forum form background */
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+
+    /* Form Input Styling */
+    .form-control {
+        background-color: #222; /* Match customer forum input background */
+        color: #fff; /* Match customer forum input text color */
+        border: 1px solid #555; /* Add a subtle border */
+    }
+
+    .form-control:focus {
+        border-color: #007bff; /* Highlight focus with blue border */
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a glow effect */
+    }
+</style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Admin Comment Form -->
+        <form method="POST" action="{{ url_for('adminForum') }}" class="comment-form mb-4">
+            <div class="mb-3">
+                <input type="text" name="name" placeholder="Admin Name" required class="form-control">
             </div>
-            <div class="comment-actions">
-                <form method="POST" action="{{ url_for('admin_delete_comment') }}">
-                    <input type="hidden" name="comment_index" value="{{ loop.index0 }}">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                    <button type="button" class="btn btn-edit">Edit</button>
-                </form>
+            <div class="mb-3">
+                <textarea name="comment" placeholder="Your Comment" required class="form-control" rows="4"></textarea>
             </div>
-        </li>
-        {% endfor %}
-    </ul>
-    <a href="{{ url_for('customerForum') }}" class="btn btn-back">Back to Customer Forum</a>
-</div>
+            <input type="hidden" name="is_admin" value="true">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <!-- Display Comments -->
+        <h2 class="text-center my-4">All Comments</h2>
+        <ul class="list-unstyled">
+            {% for comment in comments %}
+                <li class="comment-item p-3 border rounded">
+                    <strong class="{% if comment.is_admin %}admin-name{% else %}comment-author{% endif %}">
+                        {{ comment.name }}
+                    </strong>:
+                    <span class="comment-text">{{ comment.comment }}</span>
+
+                    <!-- Edit and Delete Buttons -->
+                    <div class="edit-delete-buttons">
+                        <form method="POST" action="{{ url_for('edit_comment', comment_id=comment.id) }}" style="display:inline;">
+                            <input type="text" name="new_comment" placeholder="Edit comment" value="{{ comment.comment }}" required>
+                            <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                        </form>
+                        <form method="POST" action="{{ url_for('delete_comment', comment_id=comment.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
+
+                    <!-- Reply Button -->
+                    <button class="btn btn-sm btn-link reply-btn" data-id="{{ comment.id }}">Reply</button>
+
+                    <!-- Reply Form (Hidden by Default) -->
+                    <form method="POST" action="" class="reply-form mt-2 d-none">
+                        <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                        <div class="mb-2">
+                            <input type="text" name="name" placeholder="Admin Name" required class="form-control">
+                        </div>
+                        <div class="mb-2">
+                            <textarea name="comment" placeholder="Your Reply" required class="form-control" rows="2"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-secondary">Submit Reply</button>
+                    </form>
+
+                    <!-- Display Replies -->
+                    {% if comment.replies %}
+                        <ul class="replies list-unstyled mt-2">
+                            {% for reply in comment.replies %}
+                                <li class="reply-item p-2 border-start ps-3">
+                                    <strong class="{% if reply.is_admin %}admin-name{% else %}reply-author{% endif %}">
+                                        {{ reply.name }}
+                                    </strong>:
+                                    <span class="reply-text">{{ reply.comment }}</span>
+
+                                    <!-- Edit and Delete Buttons for Replies -->
+                                    <div class="edit-delete-buttons">
+                                        <form method="POST" action="{{ url_for('edit_comment', comment_id=reply.id) }}" style="display:inline;">
+                                            <input type="text" name="new_comment" placeholder="Edit reply" value="{{ reply.comment }}" required>
+                                            <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                                        </form>
+                                        <form method="POST" action="{{ url_for('delete_comment', comment_id=reply.id) }}" style="display:inline;">
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script>
+        // Toggle reply form visibility
+        document.querySelectorAll('.reply-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                this.nextElementSibling.classList.toggle('d-none');
+            });
+        });
+    </script>
+</body>
 {% endblock %}

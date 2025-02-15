@@ -665,13 +665,108 @@ def reset_password():
 @app.route('/contactUs')
 def contact_us():
     return render_template('contactUs.html')
-@app.route('/customerForum')
-def customerForum():
-    return render_template('customerForum.html')
 
-@app.route('/adminForum')
+comments = []
+
+@app.route('/customerForum', methods=['GET', 'POST'])
+def customerForum():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        comment = request.form.get('comment')
+        parent_id = request.form.get('parent_id')  # Get parent comment ID if it's a reply
+
+        if parent_id:  # If it's a reply, find the parent comment and add the reply
+            for c in comments:
+                if c['id'] == int(parent_id):
+                    if 'replies' not in c:  # Ensure 'replies' key exists
+                        c['replies'] = []
+                    reply_id = len(c['replies']) + 1  # Generate a unique ID for the reply
+                    c['replies'].append({'id': reply_id, 'name': name, 'comment': comment})
+                    break
+        else:  # Otherwise, add a new top-level comment
+            comment_id = len(comments) + 1
+            comments.append({
+                'id': comment_id,
+                'name': name,
+                'comment': comment,
+                'replies': []  # Initialize 'replies' for top-level comments
+            })
+
+        return redirect(url_for('customerForum'))
+
+    return render_template('customerForum.html', comments=comments)
+
+
+@app.route('/adminForum', methods=['GET', 'POST'])
 def adminForum():
-    return render_template('adminForum.html')
+    if request.method == 'POST':
+        name = request.form.get('name')
+        comment = request.form.get('comment')
+        parent_id = request.form.get('parent_id')  # Get parent comment ID if it's a reply
+        is_admin = True  # All comments in admin forum are from admins
+
+        if parent_id:  # If it's a reply, find the parent comment and add the reply
+            for c in comments:
+                if c['id'] == int(parent_id):
+                    if 'replies' not in c:  # Ensure 'replies' key exists
+                        c['replies'] = []
+                    reply_id = len(c['replies']) + 1  # Generate a unique ID for the reply
+                    c['replies'].append({'id': reply_id, 'name': name, 'comment': comment, 'is_admin': is_admin})
+                    break
+        else:  # Otherwise, add a new top-level comment
+            comment_id = len(comments) + 1
+            comments.append({
+                'id': comment_id,
+                'name': name,
+                'comment': comment,
+                'is_admin': is_admin,
+                'replies': []  # Initialize 'replies' for top-level comments
+            })
+
+        return redirect(url_for('adminForum'))
+
+    return render_template('adminForum.html', comments=comments)
+
+
+@app.route('/edit-comment/<int:comment_id>', methods=['POST'])
+def edit_comment(comment_id):
+    new_text = request.form.get('new_comment')
+
+    # Search for the comment in top-level comments
+    for comment in comments:
+        if comment['id'] == comment_id:
+            comment['comment'] = new_text
+            break
+        # Search for the comment in replies
+        if 'replies' in comment:
+            for reply in comment['replies']:
+                if reply['id'] == comment_id:
+                    reply['comment'] = new_text
+                    break
+
+    return redirect(url_for('adminForum'))
+
+
+@app.route('/delete-comment/<int:comment_id>', methods=['POST'])
+def delete_comment(comment_id):
+    global comments
+
+    # Iterate through top-level comments
+    for comment in comments:
+        # Check if the comment itself matches the comment_id
+        if comment['id'] == comment_id:
+            comments.remove(comment)
+            break
+        # Check if the comment has replies
+        if 'replies' in comment:
+            # Iterate through replies
+            for reply in comment['replies']:
+                if reply['id'] == comment_id:
+                    comment['replies'].remove(reply)
+                    break
+
+    return redirect(url_for('adminForum'))
+
 
 
 @app.route('/signup_cus', methods=['GET', 'POST'])
