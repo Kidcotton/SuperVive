@@ -20,7 +20,22 @@ def initialize_cart():
     if 'cart' not in session:
         session['cart'] = []
 
+@app.route('/checkout', methods=['POST'])
+def checkout():
+    if 'cart' not in session:
+        session['cart'] = []
 
+    cart = session.get('cart', [])
+    total_price = sum(item['price'] * item['quantity'] for item in cart)
+
+    session['total_price'] = total_price
+
+    return redirect(url_for('checkout_page'))
+
+@app.route('/checkoutpage')
+def checkout_page():
+    total_price = session.get('total_price', 0)
+    return render_template('checkoutpage.html', total_price=total_price)
 
 @app.route('/prebuilds')
 def prebuilds():
@@ -192,9 +207,15 @@ def remove_from_cart():
     session['cart'] = [item for item in cart if item.get('id') != item_id]
     return jsonify(success=True)
 
-@app.route('/get_cart')
+@app.route('/get_cart', methods=['GET'])
 def get_cart():
-    return jsonify(session.get('cart', []))
+    cart = session.get('cart', [])
+    subtotal = sum(item['price'] * item['quantity'] for item in cart)
+
+    session['cart_total'] = subtotal
+    print(f"Cart total set in session: {subtotal}")
+
+    return jsonify(cart)
 
 @app.route('/cart')
 def cart():
@@ -398,11 +419,9 @@ def populate():
     return redirect(url_for('index'))
 
 
-
 @app.route('/details')
 def details():
     users_dict = {}
-    discount_codes = []  # This list will store all generated codes
     try:
         db = shelve.open('user.db', 'r')
         users_dict = db['Users']
@@ -415,7 +434,10 @@ def details():
         user = users_dict.get(key)
         component = user.get_types_component()
         condition = user.get_condition()
-        code, value = generate_discount_code(component, condition, discount_codes)
+
+        # Call the corrected function with only two parameters
+        code, value = generate_discount_code(component, condition)
+
         user.discount = value
         user.discount_code = code
         users_list.append(user)
@@ -506,14 +528,8 @@ def delete_tradein(id):
     db.close()
     return redirect(url_for('retrieve_TradeIn'))
 
-def generate_discount_code(component, condition, discount_codes=[]):
-    characters = string.ascii_uppercase + string.digits
-    code = ''.join(random.choices(characters, k=8))
-    discount_value = discount(component, condition)
-    discount_codes.append((code, discount_value))
-    print(f"Generated code: {code}, Value: {discount_value}")  # Debug print
-    print(f"Current list of discount codes: {discount_codes}")  # Debug print
-    return code, discount_value
+
+discount_codes = []  # Store (code, value, component, condition)
 
 def discount(component, condition):
     discounts = {
@@ -610,7 +626,56 @@ def discount(component, condition):
         ('PS', 'Barely-Used'): 40,
         ('PS', 'Perfect'): 50,
     }
-    return discounts.get((component, condition), "No discount found")
+    return discounts.get((component, condition), "No discount found")  # Returns the discount value
+
+
+def generate_discount_code(component, condition):
+    characters = string.ascii_uppercase + string.digits
+    code = ''.join(random.choices(characters, k=8))  # Generate a random 8-character code
+
+    discount_value = discount(component, condition)
+
+    if discount_value == "No discount found":
+        return "Invalid component or condition"
+
+    # Store (code, discount_value, component, condition)
+    discount_codes.append((code, discount_value, component, condition))
+
+    print(f"Generated Code: {code} | Component: {component} | Condition: {condition} | Value: {discount_value}")
+    return code, discount_value
+
+
+@app.route('/apply_discount', methods=['POST'])
+def apply_discount():
+    data = request.get_json()
+    discount_code = data.get('discount_code')
+
+    if 'used_discount_codes' not in session:
+        session['used_discount_codes'] = []
+
+    print(f"Received discount code: {discount_code}")
+    print(f"Session used codes: {session['used_discount_codes']}")
+
+    total = session.get('cart_total', 0)
+    print(f"Current cart total: {total}")
+
+    matching_code = next((value for code, value, _, _ in discount_codes if code == discount_code), None)
+
+    if matching_code is not None:
+        if discount_code in session['used_discount_codes']:
+            print("Discount code already used.")
+            return jsonify({"success": False, "message": "Discount code has already been used."})
+
+        new_total = max(total - matching_code, 0)
+        session['cart_total'] = new_total
+        session['used_discount_codes'].append(discount_code)
+
+        print(f"New total after discount: {new_total}")
+        return jsonify({"success": True, "new_total": new_total})
+
+    print("Invalid discount code.")
+    return jsonify({"success": False, "message": "Invalid discount code"})
+
 class ForgotPasswordForm(Form):
     email = StringField('Email Address:', [
         validators.DataRequired(),
