@@ -45,6 +45,11 @@
         <div id="cart-items"></div>
         <div class="text-end">
             <h4>Subtotal: <span id="subtotal">$0.00</span></h4>
+            <form id="discount-form" class="mb-3">
+                <label for="discount-code" class="form-label">Discount Code:</label>
+                <input type="text" id="discount-code" class="form-control" placeholder="Enter discount code">
+                <button type="button" class="btn btn-success mt-2" onclick="applyDiscount()">Apply</button>
+            </form>
             <h3>Total: <span id="total">$0.00</span></h3>
             <button class="btn btn-primary">Checkout</button>
         </div>
@@ -93,6 +98,23 @@
                     document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
                     document.getElementById('total').textContent = `$${subtotal.toFixed(2)}`;
                 });
+        }
+
+        function applyDiscount() {
+            const discountCode = document.getElementById('discount-code').value;
+            fetch('/apply_discount', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ discount_code: discountCode })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('total').textContent = `$${data.new_total.toFixed(2)}`;
+                } else {
+                    alert('Invalid discount code.');
+                }
+            });
         }
 
         function updateQuantity(itemId, action) {
