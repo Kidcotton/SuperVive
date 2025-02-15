@@ -9,6 +9,11 @@ from Form import AdminSignUpForm
 from wtforms import Form, StringField, PasswordField, validators
 import random
 import string
+import os
+from werkzeug.utils import secure_filename
+from flask import render_template, request, redirect, url_for, flash
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
@@ -234,23 +239,43 @@ def index():
         return render_template('search_results.html', results=results, keyword=keyword)
     return render_template('index.html')
 
+
+
 @app.route('/add_product', methods=['GET', 'POST'])
 def add_product():
     if request.method == 'POST':
-        product_id = request.form['product_id']
-        name = request.form['name']
+
+        product_id = request.form['product_id'].strip()
+        name = request.form['name'].strip()
         price = float(request.form['price'])
         stock = int(request.form['stock'])
-        description = request.form['description']
+        description = request.form['description'].strip()
         image = request.files.get('image')
+
         image_filename = None
-        if image:
-            image_filename = f"images/{product_id}_{image.filename}"
-            image.save(f'./static/{image_filename}')
+        if image and image.filename:
+            try:
+
+                image_folder = os.path.join('Webapplication', 'static', 'images')
+                os.makedirs(image_folder, exist_ok=True)
+
+
+                filename = secure_filename(f"{product_id}{image.filename}")
+                image_path = os.path.join(image_folder, filename)
+                image.save(image_path)
+
+
+                image_filename = f"images/{filename}"
+            except Exception as e:
+                flash(f"Error saving image: {str(e)}", 'error')
+                return redirect(url_for('add_product'))
+
+
         with shelve.open(DATABASE, writeback=True) as db:
             if product_id in db:
                 flash(f"Product ID '{product_id}' already exists!", 'error')
                 return redirect(url_for('add_product'))
+
             db[product_id] = {
                 'name': name,
                 'price': price,
@@ -258,8 +283,11 @@ def add_product():
                 'description': description,
                 'image': image_filename
             }
-            flash(f"Product '{name}' added successfully!", 'success')
-            return redirect(url_for('index'))
+
+        flash(f"Product '{name}' added successfully!", 'success')
+        return redirect(url_for('index'))
+
+
     return render_template('add_product.html')
 
 @app.route('/edit/<item_id>', methods=['GET', 'POST'])
