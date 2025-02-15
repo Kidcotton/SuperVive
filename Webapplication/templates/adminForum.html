@@ -4,14 +4,14 @@
 {% block content %}
 <head>
    <style>
-    /* Ensure content doesn't get blocked by the navbar */
+
     body {
         padding-top: 80px; /* Adjust based on the height of your navbar */
         background-color: #fffff; /* Match customer forum background */
         color: #fff; /* Match customer forum text color */
     }
 
-    /* Admin Comment Form Styling */
+    /* STYLING FOR ADMIN COMMENT FORM*/
     .comment-form {
         background: #444; /* Match customer forum form background */
         padding: 20px;
@@ -21,7 +21,7 @@
         max-width: 800px; /* Limit the width */
     }
 
-    /* Comment Item Styling */
+    /* STYLING FOR ADMIN COMMENT ITEM */
     .comment-item {
         background: #555; /* Match customer forum comment background */
         padding: 15px;
@@ -33,19 +33,19 @@
         margin: 10px auto; /* Center the comments */
     }
 
-    /* Comment Author Styling */
+    /* STYLING FOR COMMENT AUTHOR */
     .comment-author {
         font-weight: bold;
         color: #007bff; /* Blue for comment authors */
     }
 
-    /* Admin Name Styling */
+    /*STYLING FOR ADMIN NAME */
     .admin-name {
         color: red; /* Keep admin names red */
         font-weight: bold;
     }
 
-    /* Edit and Delete Buttons */
+    /* EDIT AND DELETE */
     .edit-delete-buttons {
         position: absolute;
         right: 10px;
@@ -61,29 +61,29 @@
         cursor: pointer;
     }
 
-    /* Edit Button Styling */
+    /* STYLING FOR EDIT BUTTON */
     .edit-delete-buttons button.edit {
-        background-color: #ffc107; /* Yellow for edit button */
+        background-color: #ffc107;
     }
 
     .edit-delete-buttons button.edit:hover {
-        background-color: #e0a800; /* Darker yellow on hover */
+        background-color: #e0a800;
     }
 
-    /* Delete Button Styling */
+    /* DELETE BUTTON STYLING*/
     .edit-delete-buttons button.delete {
-        background-color: #dc3545; /* Red for delete button */
+        background-color: #dc3545;
     }
 
     .edit-delete-buttons button.delete:hover {
-        background-color: #c82333; /* Darker red on hover */
+        background-color: #c82333;
     }
 
-    /* Reply Item Styling */
+    /* REPLY STYLING */
     .reply-item {
-        background: #444; /* Match customer forum reply background */
+        background: #444;
         padding: 10px;
-        border-left: 3px solid #6c757d; /* Match customer forum reply border */
+        border-left: 3px solid #6c757d;
         border-radius: 5px;
         margin-top: 5px;
         position: relative;
@@ -91,40 +91,40 @@
 
     .reply-author {
         font-weight: bold;
-        color: #007bff; /* Match customer forum reply author color */
+        color: #007bff;
     }
 
     .reply-text {
         display: block;
         margin-top: 5px;
-        color: #fff; /* Match customer forum text color */
+        color: #fff;
     }
 
-    /* Reply Form Styling */
+    /* REPLY FORM STYLING */
     .reply-form {
-        background: #444; /* Match customer forum form background */
+        background: #444;
         padding: 10px;
         border-radius: 5px;
         margin-top: 10px;
     }
 
-    /* Form Input Styling */
+    /* INPUT STYLING */
     .form-control {
-        background-color: #222; /* Match customer forum input background */
-        color: #fff; /* Match customer forum input text color */
-        border: 1px solid #555; /* Add a subtle border */
+        background-color: #222;
+        color: #fff;
+        border: 1px solid #555;
     }
 
     .form-control:focus {
-        border-color: #007bff; /* Highlight focus with blue border */
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a glow effect */
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     }
 </style>
 </head>
 
 <body>
     <div class="container">
-        <!-- Admin Comment Form -->
+
         <form method="POST" action="{{ url_for('adminForum') }}" class="comment-form mb-4">
             <div class="mb-3">
                 <input type="text" name="name" placeholder="Admin Name" required class="form-control">
@@ -136,7 +136,7 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
 
-        <!-- Display Comments -->
+
         <h2 class="text-center my-4">All Comments</h2>
         <ul class="list-unstyled">
             {% for comment in comments %}
@@ -146,7 +146,7 @@
                     </strong>:
                     <span class="comment-text">{{ comment.comment }}</span>
 
-                    <!-- Edit and Delete Buttons -->
+
                     <div class="edit-delete-buttons">
                         <form method="POST" action="{{ url_for('edit_comment', comment_id=comment.id) }}" style="display:inline;">
                             <input type="text" name="new_comment" placeholder="Edit comment" value="{{ comment.comment }}" required>
@@ -157,10 +157,10 @@
                         </form>
                     </div>
 
-                    <!-- Reply Button -->
+
                     <button class="btn btn-sm btn-link reply-btn" data-id="{{ comment.id }}">Reply</button>
 
-                    <!-- Reply Form (Hidden by Default) -->
+
                     <form method="POST" action="" class="reply-form mt-2 d-none">
                         <input type="hidden" name="parent_id" value="{{ comment.id }}">
                         <div class="mb-2">
@@ -172,7 +172,7 @@
                         <button type="submit" class="btn btn-sm btn-secondary">Submit Reply</button>
                     </form>
 
-                    <!-- Display Replies -->
+                    <!-- TO DISPLAY REPLIES -->
                     {% if comment.replies %}
                         <ul class="replies list-unstyled mt-2">
                             {% for reply in comment.replies %}
@@ -182,7 +182,7 @@
                                     </strong>:
                                     <span class="reply-text">{{ reply.comment }}</span>
 
-                                    <!-- Edit and Delete Buttons for Replies -->
+
                                     <div class="edit-delete-buttons">
                                         <form method="POST" action="{{ url_for('edit_comment', comment_id=reply.id) }}" style="display:inline;">
                                             <input type="text" name="new_comment" placeholder="Edit reply" value="{{ reply.comment }}" required>

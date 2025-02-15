@@ -31,7 +31,7 @@
         color: #6c757d;
     }
 
-    /* General Page Styling */
+    /* STYLING FOR THE PAGE */
     body {
         font-family: Arial, sans-serif;
         background-color: #222;
@@ -40,7 +40,7 @@
         padding: 0;
     }
 
-    /* Comment Form Styling */
+    /* STYLING FOR COMMENT FORM */
     .comment-form {
         background: #444;
         padding: 20px;
@@ -53,7 +53,7 @@
         color: #fff;
     }
 
-    /* Comment Item Styling */
+    /* STYLING FOR COMMENT ITEM*/
     .comment-item {
         background-color: #555;
         padding: 15px;
@@ -63,7 +63,7 @@
 
     .comment-author {
         font-weight: bold;
-        color: #007bff; /* Blue color for original comment authors */
+        color: #007bff;
     }
 
     .comment-text {
@@ -71,7 +71,7 @@
         margin-top: 5px;
     }
 
-    /* Reply Section Styling */
+    /* STYLING FOR REPLY COMMENTS*/
     .reply-btn {
         font-size: 0.9rem;
         color: #007bff;
@@ -85,14 +85,14 @@
     }
 
     .reply-form {
-        background: #444; /* Match the main comment form background */
+        background: #444;
         padding: 10px;
         border-radius: 5px;
         margin-top: 10px;
     }
 
     .reply-item {
-        background: #555; /* Match the main comment item background */
+        background: #555;
         padding: 10px;
         border-left: 3px solid #6c757d;
         border-radius: 5px;
@@ -101,7 +101,7 @@
 
     .reply-author {
         font-weight: bold;
-        color: #007bff; /* Match the blue color of original comment authors */
+        color: #007bff;
     }
 
     .reply-text {
@@ -109,7 +109,7 @@
         margin-top: 5px;
     }
 
-    /* Admin Name Styling */
+    /* STYLING FOR ADMIN  */
     .admin-name {
         color: red;
         font-weight: bold;
@@ -124,7 +124,7 @@
             <p class="text-muted">Have any questions? Type them down below and have our friendly community get back to you!</p>
         </div>
 
-        <!-- Main Comment Form -->
+
         <form method="POST" action="" class="comment-form mb-4">
             <div class="mb-3">
                 <input type="text" name="name" placeholder="Your Name" required class="form-control">
@@ -135,7 +135,7 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
 
-        <!-- Display Comments -->
+
         <h2 class="text-center my-4">All Comments</h2>
         <ul class="list-unstyled">
             {% for comment in comments %}
@@ -145,10 +145,10 @@
                     </strong>:
                     <span class="comment-text">{{ comment.comment }}</span>
 
-                    <!-- Reply Button -->
+
                     <button class="btn btn-sm btn-link reply-btn" data-id="{{ comment.id }}">Reply</button>
 
-                    <!-- Reply Form (Hidden by Default) -->
+
                     <form method="POST" action="" class="reply-form mt-2 d-none">
                         <input type="hidden" name="parent_id" value="{{ comment.id }}">
                         <div class="mb-2">
@@ -160,7 +160,7 @@
                         <button type="submit" class="btn btn-sm btn-secondary">Submit Reply</button>
                     </form>
 
-                    <!-- Nested Replies -->
+                    <!-- REPLIES UNDER COMMENTS -->
                     {% if comment.replies %}
                         <ul class="replies list-unstyled mt-2">
                             {% for reply in comment.replies %}
