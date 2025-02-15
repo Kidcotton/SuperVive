@@ -78,22 +78,19 @@ function togglePassword(fieldId) {
 }
 
 function checkAdminPassword() {
-    // Show the password popup
     document.getElementById('adminPasswordPopup').style.display = 'block';
 }
 
 function verifyAdminPassword() {
-    // Check if the entered password is correct
     var enteredPassword = document.getElementById('adminPassword').value;
     if (enteredPassword === "69420") {
-        window.location.href = "{{ url_for('admin_signup') }}"; // Correct password, redirect to admin signup page
+        window.location.href = "{{ url_for('admin_signup') }}";
     } else {
         alert("Incorrect password. Please try again.");
     }
 }
 
 function closePopup() {
-    // Close the password popup
     document.getElementById('adminPasswordPopup').style.display = 'none';
 }
 </script>
