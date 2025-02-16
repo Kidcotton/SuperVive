@@ -674,7 +674,6 @@ def generate_discount_code(component, condition):
     print(f"Generated Code: {code} | Component: {component} | Condition: {condition} | Value: {discount_value}")
     return code, discount_value
 
-
 @app.route('/apply_discount', methods=['POST'])
 def apply_discount():
     data = request.get_json()
