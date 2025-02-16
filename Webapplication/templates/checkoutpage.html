@@ -125,8 +125,15 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
-        .submit-button {
+        .submit-button-container {
+            display: flex;
+            justify-content: center;
             width: 100%;
+            margin-top: 1.5rem;
+        }
+
+        .submit-button {
+            width: 50%;
             padding: 0.75rem;
             background: var(--primary-color);
             color: white;
@@ -157,17 +164,20 @@
             animation: fadeIn 0.5s ease-out forwards;
         }
 
-        #price-label{
-            color:white;
+        #paypalPayment {
+            display: none;
+            text-align: center;
         }
 
-        .item-header p{
-            color:white;
+        #paypal-container-V4BRJL9EGLXNS {
+            display: flex;
+            justify-content: center;
+            margin: 1rem auto;
+            max-width: 300px;
         }
 
-        .paypal-button-row paypal-button-number-0 paypal-button-layout-vertical paypal-button-number-single paypal-button-env-production paypal-button-color-gold paypal-button-text-color-black paypal-logo-color-blue   paypal-button-shape-rect{
-            position:absolute;
-            float:center;
+        .item-header {
+            color: white;
         }
     </style>
 </head>
@@ -175,7 +185,7 @@
     <div class="container animate-in">
         <header class="header">
             <h1>Checkout</h1>
-            <p>Total: ${{ total_price }} </p>
+            <p>Total: ${{ total_price }}</p>
         </header>
 
         <div class="card">
@@ -249,22 +259,23 @@
                             <div class="error" id="cvvError"></div>
                         </div>
                     </div>
+
+                    <div class="submit-button-container">
+                        <button type="submit" class="submit-button">Complete Purchase</button>
+                    </div>
                 </div>
 
-                <div id="paypalPayment" style="display: none;">
+                <div id="paypalPayment">
                     <p style="text-align: center; padding: 2rem; color: #6b7280;">
-                        PayPal integration coming soon
                     </p>
+                    <script src="https://www.paypal.com/sdk/js?client-id=BAAQCea0ydWWp1QL83JJ1XskzvaHLtl8xX1OD4Vdzyqm8OJozHe8FgrugYQIv61ZwoiZrbch9yOiarm0Ek&components=hosted-buttons&disable-funding=venmo&currency=SGD"></script>
+                    <div id="paypal-container-V4BRJL9EGLXNS"></div>
+                    <script>
+                      paypal.HostedButtons({
+                        hostedButtonId: "V4BRJL9EGLXNS",
+                      }).render("#paypal-container-V4BRJL9EGLXNS")
+                    </script>
                 </div>
-
-                <script src="https://www.paypal.com/sdk/js?client-id=BAAQCea0ydWWp1QL83JJ1XskzvaHLtl8xX1OD4Vdzyqm8OJozHe8FgrugYQIv61ZwoiZrbch9yOiarm0Ek&components=hosted-buttons&disable-funding=venmo&currency=SGD"></script>
-                <div id="paypal-container-R36TSBYM2PJ78"></div>
-                <script>
-                    paypal.HostedButtons({
-                    hostedButtonId: "R36TSBYM2PJ78",
-                    }).render("#paypal-container-R36TSBYM2PJ78")
-                </script>
-
             </form>
         </div>
     </div>
@@ -292,7 +303,7 @@
             });
         });
 
-        // Form validation
+        // Form validation and submission
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             let isValid = true;
@@ -316,8 +327,8 @@
             });
 
             if (isValid) {
-                alert('Order placed successfully!');
-                form.reset();
+                // Redirect to thank you page instead of showing alert
+                window.location.href = 'confirmation.html';
             }
         });
     </script>

@@ -25,19 +25,31 @@ def initialize_cart():
     if 'cart' not in session:
         session['cart'] = []
 
+
 @app.route('/checkout', methods=['POST'])
 def checkout():
     if 'cart' not in session:
         session['cart'] = []
 
     cart = session.get('cart', [])
-    total_price = sum(item['price'] * item['quantity'] for item in cart)
+    subtotal = sum(item['price'] * item['quantity'] for item in cart)
+    print(f"Subtotal: {subtotal}")  # Debugging statement
 
+    # Retrieve the discount value from the session
+    discount_value = session.get('discount_value', 0)
+    print(f"Discount Value: {discount_value}")  # Debugging statement
+
+    # Calculate the total price
+    total_price = subtotal - discount_value
+    print(f"Total Price: {total_price}")  # Debugging statement
+
+    # Store the total price in the session
     session['total_price'] = total_price
 
     return redirect(url_for('checkout_page'))
 
-@app.route('/checkoutpage')
+
+@app.route('/checkout_page')
 def checkout_page():
     total_price = session.get('total_price', 0)
     return render_template('checkoutpage.html', total_price=total_price)
@@ -63,19 +75,19 @@ def prebuilds():
                 new_components = []
                 for comp in item.get('components', []):
                     if isinstance(comp, dict) and "tags" in comp and "name" in comp:
-                        assigned_emoji = "💻"  
+                        assigned_emoji = "💻"
 
                         for tag in comp["tags"]:
                             if tag in emoji_mapping:
                                 assigned_emoji = emoji_mapping[tag]
                                 break
 
-                        new_components.append(f"{assigned_emoji} {comp['name']}") 
+                        new_components.append(f"{assigned_emoji} {comp['name']}")
 
                     else:
-                        new_components.append(f"💻 {comp}")  
+                        new_components.append(f"💻 {comp}")
 
-                item['components'] = new_components  
+                item['components'] = new_components
                 prebuilts.append(item)
 
     return render_template('prebuild.html', prebuilts=prebuilts)
@@ -112,7 +124,7 @@ def submit_review():
     if not product_id or rating < 1 or rating > 5:
         return jsonify(success=False, message="Invalid input")
 
-    username = session.get('username')  
+    username = session.get('username')
 
     with shelve.open(DATABASE, writeback=True) as db:
         if product_id not in db:
@@ -122,11 +134,11 @@ def submit_review():
         if 'reviews' not in product:
             product['reviews'] = []
 
-        
+
         review_data = {'rating': rating, 'comment': comment}
         if username:
             review_data['username'] = username
-        
+
         product['reviews'].append(review_data)
 
         total_ratings = sum(r['rating'] for r in product['reviews'])
@@ -155,20 +167,20 @@ def preview(product_id):
             product['reviews'] = product.get('reviews', [])
             product['average_rating'] = product.get('average_rating', 0)
 
-            
+
             new_components = []
             for comp in product.get('components', []):
                 if isinstance(comp, dict) and "tags" in comp and "name" in comp:
-                    assigned_emoji = "💻"  
+                    assigned_emoji = "💻"
                     for tag in comp["tags"]:
                         if tag in emoji_mapping:
                             assigned_emoji = emoji_mapping[tag]
-                            break  
-                    new_components.append(f"{assigned_emoji} {comp['name']}")  
+                            break
+                    new_components.append(f"{assigned_emoji} {comp['name']}")
                 else:
-                    new_components.append(f"💻 {comp}")  
+                    new_components.append(f"💻 {comp}")
 
-            product['components'] = new_components 
+            product['components'] = new_components
 
             return render_template('preview.html', product=product, product_id=product_id)
 
@@ -176,8 +188,8 @@ def preview(product_id):
             flash('Product not found!', 'error')
             return redirect(url_for('index'))
 
-        
-        
+
+
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
     data = request.get_json()
@@ -476,8 +488,8 @@ def home():
     products = []
     with shelve.open(DATABASE) as db:
         for product_id, item in db.items():
-            if not product_id.startswith('PB'):  
-                item['id'] = product_id  
+            if not product_id.startswith('PB'):
+                item['id'] = product_id
                 products.append(item)
 
     return render_template('home.html', products=products)
@@ -698,8 +710,10 @@ def apply_discount():
         new_total = max(total - matching_code, 0)
         session['cart_total'] = new_total
         session['used_discount_codes'].append(discount_code)
+        session['discount_value'] = matching_code  # Store the discount value in the session
 
         print(f"New total after discount: {new_total}")
+        print(f"Discount value stored in session: {session['discount_value']}")
         return jsonify({"success": True, "new_total": new_total})
 
     print("Invalid discount code.")
@@ -900,7 +914,7 @@ def login():
             if email in db:
                 if db[email]['password'] == password:
                     session['email'] = email
-                    session['username'] = db[email]['username']  
+                    session['username'] = db[email]['username']
                     return redirect(url_for('home'))
                 else:
                     flash('Invalid password. Please try again.', 'error')
@@ -918,11 +932,11 @@ def admin():
     with shelve.open('users_db') as db:
         for email, details in db.items():
             users.append({
-                'username': details.get('username', 'N/A'),  
+                'username': details.get('username', 'N/A'),
                 'email': email,
                 'password': details['password']
             })
-    
+
     return render_template('admin.html', users=users)
 
 @app.route('/update_username', methods=['POST'])
@@ -939,16 +953,16 @@ def update_username():
     with shelve.open('users_db', writeback=True) as db:
         if old_email not in db:
             return jsonify(success=False, message="User not found.")
-        
+
         # Update user details
         db[new_email] = {'username': new_username, 'email': new_email, 'password': new_password}
 
         # Remove the old email entry if changed
         if new_email != old_email:
             del db[old_email]
-        
+
         db.sync()
-    
+
     return jsonify(success=True)
 
 
@@ -971,23 +985,23 @@ def delete_user(email):
 @app.route('/admin_signup', methods=['GET', 'POST'])
 def admin_signup():
     form = AdminSignUpForm(request.form)
-    
+
     if request.method == 'POST' and form.validate():
         email = form.email.data
         password = form.password.data
 
-        
+
         with shelve.open('admin_db', writeback=True) as db:
-            
+
             if email in db:
                 flash('Admin account already exists!', 'error')
                 return redirect(url_for('admin_signup'))
-            
-            
+
+
             db[email] = {'email': email, 'password': password}
             flash("Admin account created successfully!", 'success')
-            return redirect(url_for('admin_login'))  
-    
+            return redirect(url_for('admin_login'))
+
     return render_template('admin_signup.html', form=form)
 
 
@@ -997,18 +1011,18 @@ def admin_login():
         admin_email = request.form.get('email')
         admin_password = request.form.get('password')
 
-        
+
         with shelve.open('admin_db') as db:
-            
+
             admin_data = db.get(admin_email, None)
 
             if admin_data:
-                
+
                 if admin_password == admin_data['password']:
                     session['admin_logged_in'] = True
                     session['admin_email'] = admin_email
                     flash('Admin logged in successfully!', 'success')
-                    return redirect(url_for('admin'))  
+                    return redirect(url_for('admin'))
                 else:
                     flash('Invalid password. Please try again.', 'error')
             else:
@@ -1035,20 +1049,20 @@ def delete_review():
         if 'reviews' not in product or comment_index < 0 or comment_index >= len(product['reviews']):
             return jsonify(success=False, message="Invalid review index.")
 
-        
+
         del product['reviews'][comment_index]
 
-        
+
         if product['reviews']:
             total_ratings = sum(r['rating'] for r in product['reviews'])
             product['average_rating'] = round(total_ratings / len(product['reviews']), 1)
         else:
-            product['average_rating'] = 0  
+            product['average_rating'] = 0
 
         db[product_id] = product
         return jsonify(success=True, average_rating=product['average_rating'], reviews=product['reviews'])
 
-    
+
 @app.route('/findus')
 def findus():
     return render_template('findus.html')
