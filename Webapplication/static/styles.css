@@ -1,0 +1,126 @@
+body {
+    font-family: 'Gelion', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f8f9fa;
+}
+
+
+h1 {
+    color: #333;
+    font-family: 'Recoleta', serif;
+    font-size: 2.5rem;
+}
+
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    font-size: 1rem;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+
+.card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+
+.form-label {
+    font-weight: bold;
+    color: #555;
+}
+
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 5px;
+}
+
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    font-size: 1rem;
+    padding: 10px 20px;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+
+.add-products-link {
+    color: blue;
+    text-decoration: none;
+    font-size: 1rem;
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.add-products-link:hover {
+    text-decoration: underline;
+}
+
+
+form input, form button {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 16px;
+}
+
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
