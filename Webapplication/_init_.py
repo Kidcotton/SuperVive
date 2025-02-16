@@ -1072,6 +1072,9 @@ def admin_logout():
     session.clear()
     return jsonify(success=True)
 
+@app.route('/confirm')
+def confirm():
+    return render_template('confirmation.html')
 
 @app.route('/logout')
 def logout():
